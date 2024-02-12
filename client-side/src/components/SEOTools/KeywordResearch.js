@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './SEOTools.css'
 
 export const KeywordResearch = () => {
   const [keyword, setKeyword] = useState('')
   const [businessType, setBusinessType] = useState('')
 
+  //**************Use Keywordtool.io ************/
+
   // Use chat gpt to find a random 5+ high ranking seo websites in the user's business field
   const getHighRankingWebsites = (businessType) => {
     const url = 'https://api.openai.com/v1/completions'
+    const apiKey = process.env.SERP_API_KEY
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.REACT_APP_OPEN_API_KEY}`
+      'Authorization': `Bearer ${apiKey}`
     }
 
     const prompt = `Find 5+ high ranking SEO websites in the ${businessType} field`
@@ -35,13 +38,8 @@ export const KeywordResearch = () => {
 
 
   const generateResults = (keyword, businessType) => {
-    console.log(keyword, businessType)
     getHighRankingWebsites(businessType)
   }
-
-  useEffect(() => {
-    console.log(businessType, keyword)
-  }, [businessType, keyword])
 
   return (
     <div className='section-container' id='keyword-research'>
