@@ -1,0 +1,159 @@
+
+.home-pg-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: calc(100vh - 275px);
+}
+
+/* Styles for the search bar container */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 400px;
+    width: 400px;
+    margin: 2rem 0;
+  }
+  
+  /* Styles for the search input */
+  .search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #2b2b2b; /* Dark background color */
+    color: #fff; /* Text color */
+    font-size: 16px;
+    outline: none;
+  }
+  
+  /* Styles for the search button */
+  .search-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #ff6f61; /* Button background color */
+    color: #fff; /* Button text color */
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Ubuntu', sans-serif;
+  }
+  
+  /* Hover effect for the search button */
+  .search-button:hover {
+    background-color: #ff8c7a; /* Button background color on hover */
+  }
+
+  /* Result Type Select Tabbar */
+  .result-type-select {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .result-type-button {
+    width: 130px;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border: 2px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
+    font-family: 'Ubuntu', sans-serif;
+  }
+
+  .result-type-button:hover {
+      transform: scale(1.10);
+  }
+
+  /* CSS Grid for API Data */
+  .data-container {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: repeat(5, 1fr); /* Five columns, one for each field */
+    justify-items: center;
+    align-items: flex-start;
+    padding: 20px 20px 0 20px;
+    border-radius: 10px;
+    min-width: 1200px;
+}
+
+.data-field {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.data-field-title {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+}
+
+.data-label {
+    font-weight: bold;
+    text-align: center;
+}
+
+.data-cell {
+    display: flex;
+    width: 100%;
+    padding: 20px 0;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #ccc;
+    height: 30px;
+    max-height: 30px;
+}
+
+.data-cell:nth-child(odd) {
+    background-color: #555; /* Light gray background color */
+}
+
+/* Data table page arrows */
+/* Container for page arrows */
+.page-arrows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; /* Adjust margin as needed */
+}
+
+/* Styling for the arrow buttons */
+.page-arrows button {
+  background-color: #4285F4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 10px 15px;
+  margin: 0 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Styling for arrow buttons on hover */
+.page-arrows button:hover {
+  background-color: #70a4f8;
+  transform: scale(1.05);
+}
+
+
+  
