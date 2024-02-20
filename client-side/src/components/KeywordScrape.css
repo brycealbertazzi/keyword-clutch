@@ -1,3 +1,4 @@
+
 .keyword-scrape-container {
     display: flex;
     flex-direction: column;
@@ -8,7 +9,7 @@
     border: 3px solid #ad9f2f;
     min-width: 1400px;
     width: 1400px;
-    padding: 1rem;
+    padding: 20px 20px 0 20px;
     background-color: #3d3d3d;
 }
 
@@ -28,6 +29,7 @@
     align-items: center;
     justify-content: flex-start;
     border-bottom: 1px solid #ccc;
+    height: 60px;
 }
 
 .keyword-display-group:nth-child(even) {
