@@ -1,6 +1,7 @@
 import express, {static as static_} from 'express'
 import cors from 'cors'
 import axios from 'axios'
+import { load } from 'cheerio'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -63,6 +64,34 @@ app.get('/api/youtube-keyword', async (req, res) => {
     }
 })
 
+const SCRAPING_BEE_API_KEY = 'VJCE5R3SPXR31PK5AQG150Q0QG1K14IWKCI89KBL7G4DXIPC0N2BAMYYD8EOADM54WRVAJRH8FG5JA9E'
+
+app.get('/api/weburl', async (req, res) => {
+    const { websiteUrl } = req.query
+    console.log('Keyword Density.........................', websiteUrl)
+    const scrapingBeeRes = await axios.get(`https://app.scrapingbee.com/api/v1?url=${websiteUrl}&json_response=true&api_key=${SCRAPING_BEE_API_KEY}`).then((res) => {
+        return res
+    }).catch((e) => {
+        res.status(e.response.status).send('Error scraping website: ', e.response.statusText)
+        return null
+    })
+    // Use Cheerio to get keywords
+    if (!scrapingBeeRes) {
+        res.status(400).send('Unable to scrape website: HTML not returned, likely due to bad input')
+        return
+    }
+    const rawHtml = scrapingBeeRes.data.body
+    const $ = load(rawHtml)
+
+    // Extract text content from paragraphs, headings, and other content-rich elements
+    const textContent = $('p, h1, h2, h3, h4, h5, h6').map((index, element) => {
+        return $(element).text().trim()
+    }).get().join(' ') // Join all text content into a single string
+    res.status(200).send(textContent)
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })
+
+    

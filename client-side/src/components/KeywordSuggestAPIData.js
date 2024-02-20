@@ -4,24 +4,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-export const KeywordSuggestAPIData = ({data}) => {
-    const [keywordData, setKeywordData] = useState(null)
+export const KeywordSuggestAPIData = ({apiData, keyword}) => {
+    const [currentPage, setCurrentPage] = useState(0)
+    const [currentRows, setCurrentRows] = useState([])
 
     useEffect(() => {
-        setKeywordData(() => data ? (data.length > 25 ? data.slice(0, 25) : data) : null)
-    }, [data])
+        if (apiData) {
+            setCurrentRows(apiData.slice(currentPage * 25, Math.min((currentPage + 1) * 25, apiData.length)))
+        }
+    }, [currentPage, apiData])
 
     return (
         <div>
-        {keywordData &&
+        {apiData &&
             <div>
+                <h2 className='data-table-title'>Google Search Results for {keyword}</h2>
                 <div className="data-container" style={{border: '3px solid #4285F4'}}>
                     <div className="data-field">
                         <div className='data-field-title'>
                             <h3 className='data-label'>Keywords</h3>
                         </div>
-                        {keywordData.map((keyword, index) => {
-                            return <div key={index} className="data-cell">{keyword?.text || keyword?.text === 0 ? keyword.text : '-'}</div>
+                        {currentRows.map((keyword, index) => {
+                            return <div key={index} className="data-cell">{keyword?.text || keyword?.text === 0 ? keyword.text.toLowerCase() : '-'}</div>
                         })}
                     </div>
                     <div className="data-field">
@@ -31,7 +35,7 @@ export const KeywordSuggestAPIData = ({data}) => {
                                 Search Volume
                             </h3>
                         </div>
-                        {keywordData.map((keyword, index) => {
+                        {currentRows.map((keyword, index) => {
                             return <div key={index} className="data-cell">{keyword?.search_volume || keyword?.search_volume === 0 ? keyword.search_volume : '-'}</div>
                         })}
                     </div>
@@ -39,7 +43,7 @@ export const KeywordSuggestAPIData = ({data}) => {
                         <div className='data-field-title'>
                             <h3 className='data-label'>CPC</h3>
                         </div>
-                        {keywordData.map((keyword, index) => {
+                        {currentRows.map((keyword, index) => {
                             return <div key={index} className="data-cell">{keyword?.cpc || keyword?.cpc === 0 ? keyword.cpc : '-'}</div>
                         })}
                     </div>
@@ -47,7 +51,7 @@ export const KeywordSuggestAPIData = ({data}) => {
                         <div className='data-field-title'>
                             <h3 className='data-label'>KD</h3>
                         </div>
-                        {keywordData.map((keyword, index) => {
+                        {currentRows.map((keyword, index) => {
                             return <div key={index} className="data-cell">{keyword?.kd || keyword?.kd === 0 ? keyword.kd : '-'}</div>
                         })}
                     </div>
@@ -55,19 +59,22 @@ export const KeywordSuggestAPIData = ({data}) => {
                         <div className='data-field-title'>
                             <h3 className='data-label'>PD</h3>
                         </div>
-                        {keywordData.map((keyword, index) => {
+                        {currentRows.map((keyword, index) => {
                             return <div key={index} className="data-cell">{keyword?.pd || keyword?.pd === 0 ? keyword.pd : '-'}</div>
                         })}
                     </div>
                 </div>
                 {/* Page arrows */}
-                <div className='page-arrows'>
-                    <button>
-                        <FontAwesomeIcon icon={faArrowLeft} />
-                    </button>
-                    <button>
-                        <FontAwesomeIcon icon={faArrowRight} />
-                    </button>
+                <div className='table-footer'>
+                    <h4 className='page-row-display'>{(currentPage * 25) + 1}-{Math.min((currentPage + 1) * 25, apiData.length)}/{apiData.length}</h4>
+                    <div className='page-arrows'>
+                        <button disabled={currentPage <= 0} onClick={() => setCurrentPage(currentPage - 1)} style={{backgroundColor: currentPage <= 0 ? '#555' : '#4285F4'}}>
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                        </button>
+                        <button disabled={(currentPage + 1) * 25 > apiData.length} onClick={() => setCurrentPage(currentPage + 1)} style={{backgroundColor: (currentPage + 1) * 25 > apiData.length ? '#555' : '#4285F4'}}>
+                            <FontAwesomeIcon icon={faArrowRight} />
+                        </button>
+                    </div>
                 </div>
             </div>
         }

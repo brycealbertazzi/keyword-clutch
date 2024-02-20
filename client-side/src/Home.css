@@ -38,26 +38,23 @@
     padding: 8px 15px;
     border: none;
     border-radius: 20px;
-    background-color: #ff6f61; /* Button background color */
-    color: #fff; /* Button text color */
-    font-size: 16px;
     cursor: pointer;
     font-family: 'Ubuntu', sans-serif;
-  }
-  
-  /* Hover effect for the search button */
-  .search-button:hover {
-    background-color: #ff8c7a; /* Button background color on hover */
+    background-color: #2b2b2b;
   }
 
+  .search-button:hover {
+    background-color: #555;
+  }
+  
   /* Result Type Select Tabbar */
   .result-type-select {
-    width: 300px;
+    width: 450px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-top: 30px;
   }
   
   .result-type-button {
@@ -80,6 +77,10 @@
       transform: scale(1.10);
   }
 
+  .data-table-title {
+    text-align: center;
+  }
+
   /* CSS Grid for API Data */
   .data-container {
     display: grid;
@@ -90,6 +91,8 @@
     padding: 20px 20px 0 20px;
     border-radius: 10px;
     min-width: 1200px;
+    width: 1400px;
+    background-color: #3d3d3d;
 }
 
 .data-field {
@@ -115,7 +118,7 @@
 .data-cell {
     display: flex;
     width: 100%;
-    padding: 20px 0;
+    padding: 15px 0;
     align-items: center;
     justify-content: center;
     border-top: 1px solid #ccc;
@@ -128,19 +131,26 @@
 }
 
 /* Data table page arrows */
+.table-footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+
 /* Container for page arrows */
 .page-arrows {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px; /* Adjust margin as needed */
+  margin-left: 30px;
 }
 
 /* Styling for the arrow buttons */
 .page-arrows button {
-  background-color: #4285F4;
   color: #fff;
-  border: none;
+  border: 1px solid #fff;
   border-radius: 5px;
   cursor: pointer;
   font-size: 18px;
@@ -153,6 +163,10 @@
 .page-arrows button:hover {
   background-color: #70a4f8;
   transform: scale(1.05);
+}
+
+.page-arrows button:disabled {
+  cursor: not-allowed;
 }
 
 
