@@ -1,8 +1,10 @@
   import React, { useEffect, useState } from 'react'
   import './KeywordScrape.css'
   import '../Home.css'
+  import { LoadingSpinner } from '../LoadingSpinner'
+import { ResultType } from '../Utils'
 
-  export const KeywordScrape = ({apiData, url}) => {
+  export const KeywordScrape = ({apiData, url, loading, setLoadingTables}) => {
     const [keywordGroups, setKeywordGroups] = useState([])
     const GROUP_SIZE = 5
 
@@ -21,9 +23,14 @@
       setKeywordGroups(tmpGroups)
     }, [apiData])
 
+    useEffect(() => {
+      setLoadingTables({...setLoadingTables, [ResultType.WEB_URL]: false})
+  }, [keywordGroups])
+
     return (
       <div>
-        {apiData &&
+        {loading && <LoadingSpinner type={ResultType.WEB_URL}/>}
+        {apiData && !loading &&
           <div>
             <h2 className='data-table-title'>Keywords for {url}</h2>
             <div className='keyword-scrape-container'>

@@ -3,8 +3,10 @@ import '../Home.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { ResultType } from '../Utils';
 
-export const KeywordSuggestAPIData = ({apiData, keyword}) => {
+export const KeywordSuggestAPIData = ({apiData, keyword, loading, setLoadingTables}) => {
     const [currentPage, setCurrentPage] = useState(0)
     const [currentRows, setCurrentRows] = useState([])
 
@@ -14,9 +16,14 @@ export const KeywordSuggestAPIData = ({apiData, keyword}) => {
         }
     }, [currentPage, apiData])
 
+    useEffect(() => {
+        setLoadingTables({...setLoadingTables, [ResultType.GOOGLE]: false})
+    }, [currentRows])
+
     return (
         <div>
-        {apiData &&
+        {loading && <LoadingSpinner type={ResultType.GOOGLE}/>}
+        {apiData && !loading &&
             <div>
                 <h2 className='data-table-title'>Google Search Results for {keyword}</h2>
                 <div className="data-container" style={{border: '3px solid #4285F4'}}>

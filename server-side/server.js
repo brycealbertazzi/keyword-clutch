@@ -68,11 +68,10 @@ const SCRAPING_BEE_API_KEY = 'VJCE5R3SPXR31PK5AQG150Q0QG1K14IWKCI89KBL7G4DXIPC0N
 
 app.get('/api/weburl', async (req, res) => {
     const { websiteUrl } = req.query
-    console.log('Keyword Density.........................', websiteUrl)
     const scrapingBeeRes = await axios.get(`https://app.scrapingbee.com/api/v1?url=${websiteUrl}&json_response=true&api_key=${SCRAPING_BEE_API_KEY}`).then((res) => {
         return res
     }).catch((e) => {
-        res.status(e.response.status).send('Error scraping website: ', e.response.statusText)
+        res.status(e?.response?.status ? e.response.status : 400).send('Error scraping website: ', e?.response?.statusText ? e.response.statusText : '')
         return null
     })
     // Use Cheerio to get keywords

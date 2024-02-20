@@ -14,6 +14,11 @@ export const Home = () => {
     [InputType.KEYWORD]: '',
     [InputType.URL]: ''
   })
+  const [loadingTables, setLoadingTables] = useState({
+    [ResultType.GOOGLE]: false,
+    [ResultType.YOUTUBE]: false,
+    [ResultType.WEB_URL]: false
+  })
   const [keyword, setKeyword] = useState('')
   const [url, setUrl] = useState('')
   const [keywordSuggestAPIData, setKeywordSuggestAPIData] = useState(null)
@@ -26,6 +31,7 @@ export const Home = () => {
     if (currentKeyword.length <= 0) return
     setKeyword(currentKeyword)
     // Retrieve keyword data from the KeySuggest Keyword Data API
+    setLoadingTables({...loadingTables, [ResultType.GOOGLE]: true, [ResultType.YOUTUBE]: true})
     axios.get(`/api/keyword?keyword=${currentKeyword}`)
       .then((response) => {
         setKeywordSuggestAPIData(response?.data?.data?.related_kw)
@@ -52,6 +58,7 @@ export const Home = () => {
     if (currentUrl.length <= 0) return
     setUrl(currentUrl)
     const modifiedUrl = !currentUrl.startsWith('https') && !currentUrl.startsWith('http') ? `https://${currentUrl}` : currentUrl
+    setLoadingTables({...loadingTables, [ResultType.WEB_URL]: true})
     axios.get(`/api/weburl?websiteUrl=${modifiedUrl}`)
       .then((response) => {
         const websiteText = response?.data
@@ -123,9 +130,9 @@ export const Home = () => {
         </button>
       </div>
       {/* Data Grids */}
-      {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={keywordSuggestAPIData ? keywordSuggestAPIData : null} keyword={keyword}/>}
-      {selectedResultType === ResultType.YOUTUBE && <YoutubeKeyworkAPIData apiData={youtubeKeywordAPIData ? youtubeKeywordAPIData : null} keyword={keyword}/>}
-      {selectedResultType === ResultType.WEB_URL && <KeywordScrape apiData={websiteScrapeApiData} url={url}/>}
+      {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={keywordSuggestAPIData ? keywordSuggestAPIData : null} keyword={keyword} loading={loadingTables[ResultType.GOOGLE]} setLoadingTables={setLoadingTables}/>}
+      {selectedResultType === ResultType.YOUTUBE && <YoutubeKeyworkAPIData apiData={youtubeKeywordAPIData ? youtubeKeywordAPIData : null} keyword={keyword} loading={loadingTables[ResultType.YOUTUBE]} setLoadingTables={setLoadingTables}/>}
+      {selectedResultType === ResultType.WEB_URL && <KeywordScrape apiData={websiteScrapeApiData} url={url} loading={loadingTables[ResultType.WEB_URL]} setLoadingTables={setLoadingTables}/>}
     </div>
   )
 }

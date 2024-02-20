@@ -3,8 +3,10 @@ import '../Home.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { ResultType } from '../Utils';
 
-export const YoutubeKeyworkAPIData = ({apiData, keyword}) => {
+export const YoutubeKeyworkAPIData = ({apiData, keyword, loading, setLoadingTables}) => {
     const [currentPage, setCurrentPage] = useState(0)
     const [currentRows, setCurrentRows] = useState([])
 
@@ -14,9 +16,14 @@ export const YoutubeKeyworkAPIData = ({apiData, keyword}) => {
         }
     }, [currentPage, apiData])
 
+    useEffect(() => {
+        setLoadingTables({...setLoadingTables, [ResultType.YOUTUBE]: false})
+    }, [currentRows])
+
     return (
         <div>
-        {apiData &&
+        {loading && <LoadingSpinner type={ResultType.YOUTUBE}/>}
+        {apiData && !loading &&
             <div>
                 <h2 className='data-table-title'>Youtube Search results for {keyword}</h2>
                 {/* Data table */}
