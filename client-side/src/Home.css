@@ -93,6 +93,8 @@
     min-width: 1200px;
     width: 1400px;
     background-color: #3d3d3d;
+    border-style: solid;
+    border-width: 3px;
 }
 
 .data-field {

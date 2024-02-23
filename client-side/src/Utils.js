@@ -10,6 +10,12 @@ export const InputType = {
     URL: 'url'
 }
 
+export const ResultTypeColors = {
+    [ResultType.GOOGLE]: '#4285F4',
+    [ResultType.YOUTUBE]: '#f44242',
+    [ResultType.WEB_URL]: '#ad9f2f'
+}
+
 const StopWords = {
     'A': ['able', 'about', 'above', 'abroad', 'abst', 'accordance', 'according', 'accordingly', 'across', 'actually', 'added', 'adopted', 'affected', 'affecting', 'affects', 'after', 'afterwards', 'against', 'ahead', 'allow', 'allows', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'amid', 'amidst', 'among', 'amongst', 'amount', 'announce', 'another', 'anybody', 'anyhow', 'anymore', 'anything', 'anyway', 'anyways', 'apart', 'apparently', 'appear', 'appreciate', 'appropriate', 'approximately', 'around', 'asking', 'associated', 'away', 'awfully'],
     'B': ['back', 'backward', 'backwards', 'became', 'because', 'become', 'becomes', 'becoming', 'before', 'begin', 'beginning', 'begins', 'behind', 'being', 'believe', 'below', 'beside', 'besides', 'better', 'between', 'beyond', 'bill', 'both', 'bottom', 'brief', 'briefly'],
@@ -47,7 +53,7 @@ function isFirstCharLetter(str) {
     return (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)
 }
 
-const NUM_DISPLAY_KEYWORDS = 100
+const NUM_DISPLAY_KEYWORDS = 95
 export function extractKeywords(text) {
     // Convert text to lowercase to make the algorithm case-insensitive
     text = text.toLowerCase()

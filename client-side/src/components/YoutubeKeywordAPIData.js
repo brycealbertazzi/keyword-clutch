@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react'
 import '../Home.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { LoadingSpinner } from '../LoadingSpinner';
-import { ResultType } from '../Utils';
+import { ResultType, ResultTypeColors } from '../Utils';
+import { Error } from './error/Error';
 
-export const YoutubeKeyworkAPIData = ({apiData, keyword, loading, setLoadingTables}) => {
+export const YoutubeKeywordAPIData = ({apiData, keyword, loading, setLoadingTables, apiError}) => {
     const [currentPage, setCurrentPage] = useState(0)
     const [currentRows, setCurrentRows] = useState([])
 
@@ -22,12 +24,13 @@ export const YoutubeKeyworkAPIData = ({apiData, keyword, loading, setLoadingTabl
 
     return (
         <div>
+        {apiError && <Error resultType={ResultType.YOUTUBE} input={keyword}/>}
         {loading && <LoadingSpinner type={ResultType.YOUTUBE}/>}
         {apiData && !loading &&
             <div>
-                <h2 className='data-table-title'>Youtube Search results for {keyword}</h2>
+                <h2 className='data-table-title'>Youtube Search results for <span style={{color: ResultTypeColors[ResultType.YOUTUBE]}}>{keyword}</span></h2>
                 {/* Data table */}
-                <div className="data-container" style={{border: '3px solid #f44242'}}>
+                <div className="data-container" style={{borderColor: ResultTypeColors[ResultType.YOUTUBE]}}>
                     <div className="data-field">
                         <div className='data-field-title'>
                             <h3 className='data-label'>Keywords</h3>

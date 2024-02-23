@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import './Home.css'
 import { KeywordSuggestAPIData } from './components/KeywordSuggestAPIData'
-import { YoutubeKeyworkAPIData } from './components/YoutubeKeyworkAPIData'
+import { YoutubeKeywordAPIData } from './components/YoutubeKeywordAPIData'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faMagnifyingGlass, faGlobe } from '@fortawesome/free-solid-svg-icons'
-import { InputType, ResultType, extractKeywords } from './Utils'
+import { InputType, ResultType, ResultTypeColors, extractKeywords } from './Utils'
 import { KeywordScrape } from './components/KeywordScrape'
 
-export const Home = () => {
+export const Home = ({setTmpHideFooter}) => {
   const [userInput, setUserInput] = useState({
     [InputType.KEYWORD]: '',
     [InputType.URL]: ''
@@ -21,10 +21,16 @@ export const Home = () => {
   })
   const [keyword, setKeyword] = useState('')
   const [url, setUrl] = useState('')
-  const [keywordSuggestAPIData, setKeywordSuggestAPIData] = useState(null)
-  const [youtubeKeywordAPIData, setYoutubeKeywordAPIData] = useState(null)
-  const [websiteScrapeApiData, setWebsiteScrapeApiData] = useState(null)
+
+  const [googleSearchResults, setGoogleSearchResults] = useState(null)
+  const [youtubeSearchResults, setYoutubeSearchResults] = useState(null)
+  const [webUrlKeywordResults, setWebUrlKeywordResults] = useState(null)
+
   const [selectedResultType, setSelectedResultType] = useState(ResultType.GOOGLE)
+
+  const [googleApiError, setGoogleApiError] = useState(false)
+  const [youtubeApiError, setYoutubeApiError] = useState(false)
+  const [webUrlApiError, setWebUrlApiError] = useState(false)
 
   const submitKeyword = () => {
     const currentKeyword = userInput[InputType.KEYWORD]
@@ -32,12 +38,20 @@ export const Home = () => {
     setKeyword(currentKeyword)
     // Retrieve keyword data from the KeySuggest Keyword Data API
     setLoadingTables({...loadingTables, [ResultType.GOOGLE]: true, [ResultType.YOUTUBE]: true})
+    setGoogleApiError(false)
+    setYoutubeApiError(false)
     axios.get(`/api/keyword?keyword=${currentKeyword}`)
       .then((response) => {
-        setKeywordSuggestAPIData(response?.data?.data?.related_kw)
+        const googleKeywordData = response?.data?.data?.related_kw
+        setGoogleSearchResults(googleKeywordData)
+        if (!googleKeywordData || googleKeywordData.length <= 0) {
+          setGoogleApiError(true)
+          setLoadingTables({...loadingTables, [ResultType.GOOGLE]: false})
+        }
       })
       .catch((error) => {
-        console.error('Error fetching keyword data:', error)
+        setGoogleApiError(true)
+        setLoadingTables({...loadingTables, [ResultType.GOOGLE]: false})
       })
     
     // Retrieve keyword data from the Keyword Research for YouTube API
@@ -46,10 +60,15 @@ export const Home = () => {
         let youtubeKeywordData = []
         if (response?.data?.exact_keyword) youtubeKeywordData = youtubeKeywordData.concat(response?.data?.exact_keyword)
         if (response?.data?.related_keywords) youtubeKeywordData = youtubeKeywordData.concat(response?.data?.related_keywords)
-        setYoutubeKeywordAPIData(youtubeKeywordData.length > 0 ? youtubeKeywordData : null)
+        setYoutubeSearchResults(youtubeKeywordData.length > 0 ? youtubeKeywordData : null)
+        if (youtubeKeywordData.length <= 0) {
+          setYoutubeApiError(true)
+          setLoadingTables({...loadingTables, [ResultType.YOUTUBE]: false})
+        }
       })
       .catch((error) => {
-        console.error('Error fetching youtube keyword data:', error)
+        setYoutubeApiError(true)
+        setLoadingTables({...loadingTables, [ResultType.YOUTUBE]: false})
       })
   }
 
@@ -59,16 +78,21 @@ export const Home = () => {
     setUrl(currentUrl)
     const modifiedUrl = !currentUrl.startsWith('https') && !currentUrl.startsWith('http') ? `https://${currentUrl}` : currentUrl
     setLoadingTables({...loadingTables, [ResultType.WEB_URL]: true})
+    setWebUrlApiError(false)
     axios.get(`/api/weburl?websiteUrl=${modifiedUrl}`)
       .then((response) => {
         const websiteText = response?.data
         if (websiteText && websiteText.length > 0) {
           const extractedKeywords = extractKeywords(websiteText)
-          setWebsiteScrapeApiData(extractedKeywords)
+          setWebUrlKeywordResults(extractedKeywords)
+        } else {
+          setWebUrlApiError(true)
+          setLoadingTables({...loadingTables, [ResultType.WEB_URL]: false})
         }
       })
       .catch((error) => {
-        console.error('Error fetching keyword density data:', error)
+        setWebUrlApiError(true)
+        setLoadingTables({...loadingTables, [ResultType.WEB_URL]: false})
       })
   }
 
@@ -92,6 +116,12 @@ export const Home = () => {
   }
 
   const handleChangeResultType = (resultType) => {
+    if (document.querySelector('.data-container')) {
+      setTmpHideFooter(true)
+      setTimeout(() => {
+        setTmpHideFooter(false)
+      }, 100)
+    }
     setSelectedResultType(resultType)
     setUserInput({
       [InputType.KEYWORD]: '',
@@ -104,19 +134,19 @@ export const Home = () => {
       {/* Result Type Select Tab: Google or Youtube */}
       <div className="result-type-select">
         <div>
-          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.GOOGLE ? '#4285F4' : '#555'}} onClick={() => handleChangeResultType(ResultType.GOOGLE)}>
+          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.GOOGLE ? ResultTypeColors[ResultType.GOOGLE] : '#555'}} onClick={() => handleChangeResultType(ResultType.GOOGLE)}>
             Google&nbsp;
             <FontAwesomeIcon icon={faGoogle} />
           </button>
         </div>
         <div>
-          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.YOUTUBE ? '#f44242' : '#555'}} onClick={() => handleChangeResultType(ResultType.YOUTUBE)}>
+          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.YOUTUBE ? ResultTypeColors[ResultType.YOUTUBE]  : '#555'}} onClick={() => handleChangeResultType(ResultType.YOUTUBE)}>
             Youtube&nbsp;
             <FontAwesomeIcon icon={faYoutube} />
           </button>
         </div>
         <div>
-          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.WEB_URL ? '#ad9f2f' : '#555'}} onClick={() => handleChangeResultType(ResultType.WEB_URL)}>
+          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.WEB_URL ? ResultTypeColors[ResultType.WEB_URL]  : '#555'}} onClick={() => handleChangeResultType(ResultType.WEB_URL)}>
             Website&nbsp;
             <FontAwesomeIcon icon={faGlobe} />
           </button>
@@ -130,9 +160,9 @@ export const Home = () => {
         </button>
       </div>
       {/* Data Grids */}
-      {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={keywordSuggestAPIData ? keywordSuggestAPIData : null} keyword={keyword} loading={loadingTables[ResultType.GOOGLE]} setLoadingTables={setLoadingTables}/>}
-      {selectedResultType === ResultType.YOUTUBE && <YoutubeKeyworkAPIData apiData={youtubeKeywordAPIData ? youtubeKeywordAPIData : null} keyword={keyword} loading={loadingTables[ResultType.YOUTUBE]} setLoadingTables={setLoadingTables}/>}
-      {selectedResultType === ResultType.WEB_URL && <KeywordScrape apiData={websiteScrapeApiData} url={url} loading={loadingTables[ResultType.WEB_URL]} setLoadingTables={setLoadingTables}/>}
+      {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={googleSearchResults ? googleSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.GOOGLE]} setLoadingTables={setLoadingTables} apiError={googleApiError}/>}
+      {selectedResultType === ResultType.YOUTUBE && <YoutubeKeywordAPIData apiData={youtubeSearchResults ? youtubeSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.YOUTUBE]} setLoadingTables={setLoadingTables} apiError={youtubeApiError}/>}
+      {selectedResultType === ResultType.WEB_URL && <KeywordScrape apiData={webUrlKeywordResults ? webUrlKeywordResults : null} url={url} loading={loadingTables[ResultType.WEB_URL]} setLoadingTables={setLoadingTables} apiError={webUrlApiError}/>}
     </div>
   )
 }
