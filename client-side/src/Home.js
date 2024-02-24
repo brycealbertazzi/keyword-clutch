@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import './Home.css'
+import './App.css'
 import { KeywordSuggestAPIData } from './components/KeywordSuggestAPIData'
 import { YoutubeKeywordAPIData } from './components/YoutubeKeywordAPIData'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -134,19 +135,19 @@ export const Home = ({setTmpHideFooter}) => {
       {/* Result Type Select Tab: Google or Youtube */}
       <div className="result-type-select">
         <div>
-          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.GOOGLE ? ResultTypeColors[ResultType.GOOGLE] : '#555'}} onClick={() => handleChangeResultType(ResultType.GOOGLE)}>
+          <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.GOOGLE ? ResultTypeColors[ResultType.GOOGLE] : '#555'}} onClick={() => handleChangeResultType(ResultType.GOOGLE)}>
             Google&nbsp;
             <FontAwesomeIcon icon={faGoogle} />
           </button>
         </div>
         <div>
-          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.YOUTUBE ? ResultTypeColors[ResultType.YOUTUBE]  : '#555'}} onClick={() => handleChangeResultType(ResultType.YOUTUBE)}>
+          <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.YOUTUBE ? ResultTypeColors[ResultType.YOUTUBE]  : '#555'}} onClick={() => handleChangeResultType(ResultType.YOUTUBE)}>
             Youtube&nbsp;
             <FontAwesomeIcon icon={faYoutube} />
           </button>
         </div>
         <div>
-          <button className="result-type-button" style={{backgroundColor: selectedResultType === ResultType.WEB_URL ? ResultTypeColors[ResultType.WEB_URL]  : '#555'}} onClick={() => handleChangeResultType(ResultType.WEB_URL)}>
+          <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.WEB_URL ? ResultTypeColors[ResultType.WEB_URL]  : '#555'}} onClick={() => handleChangeResultType(ResultType.WEB_URL)}>
             Website&nbsp;
             <FontAwesomeIcon icon={faGlobe} />
           </button>
