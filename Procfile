@@ -1,1 +1,1 @@
-web: npm start --prefix client-side && npm start --prefix server-side
+web: npm run client-side && npm run server-side
