@@ -3,16 +3,13 @@
   "scripts": {
     "client-side": "cd client-side && npm start",
     "server-side": "node server-side/server.js",
-    "dev": "concurrently \"npm run client-side\" \"npm run server-side\"",
-    "prod": "npm run server-side && npm run client-side" 
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+    "dev": "concurrently \"npm run client-side\" \"npm run server-side\""
   },
   "dependencies": {
     "@google-cloud/secret-manager": "^5.0.1",
     "apify": "^3.1.15",
     "cheerio": "^1.0.0-rc.12",
+    "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dot-env": "^0.0.1",
     "express": "^4.18.2",
