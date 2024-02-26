@@ -3,7 +3,8 @@
   "scripts": {
     "client-side": "cd client-side && npm start",
     "server-side": "node server-side/server.js",
-    "dev": "concurrently \"npm run client-side\" \"npm run server-side\""
+    "dev": "concurrently \"npm run client-side\" \"npm run server-side\"",
+    "prod": "npm run server-side && npm run client-side" 
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
