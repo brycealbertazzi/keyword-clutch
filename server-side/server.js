@@ -5,8 +5,6 @@ import { load } from 'cheerio'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
-const PORT = process.env.PORT || 3001
-
 const app = express()
 
 app.use(cors())
@@ -93,8 +91,9 @@ app.get('/api/weburl', async (req, res) => {
     res.status(200).send(textContent)
 })
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
+const port = process.env.PORT || 3001
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
 })
 
     

@@ -1,1 +1,2 @@
-web: npm run client-side && npm run server-side
+web: npm run client-side
+web: npm run server-side
