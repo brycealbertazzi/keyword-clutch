@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Home } from "./Home"
 import './App.css'
 import { Navbar } from "./components/Navbar"
@@ -19,7 +19,6 @@ function App() {
           <Routes>
             <Route exact path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home setTmpHideFooter={setTmpHideFooter}/>} />
-            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           {!tmpHideFooter && <Footer />}
         </div>
