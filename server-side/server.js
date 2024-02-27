@@ -6,6 +6,7 @@ import routes from './routes.js'
 
 const app = express()
 
+// API Middleware
 app.use(cors())
 app.use(express.json())
 app.use('/api', routes)
@@ -13,7 +14,7 @@ app.use('/api', routes)
 // Serve static files
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-app.use(static_(join(__dirname, '../client-side/public')))
+app.use(static_(join(__dirname, '../client-side/build')))
 
 const port = process.env.PORT || 3001
 app.listen(port, () => {
