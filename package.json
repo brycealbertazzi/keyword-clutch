@@ -3,7 +3,7 @@
   "scripts": {
     "client-side": "cd client-side && npm start",
     "server-side": "node server-side/server.js",
-    "dev": "concurrently \"PORT=56897 npm run client-side\" \"PORT=45890 npm run server-side\"",
+    "dev": "concurrently \"npm run client-side\" \"PORT=45890 npm run server-side\"",
     "heroku-postbuild": "cd client-side && npm install && npm run build"
   },
   "dependencies": {
