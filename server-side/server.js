@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 app.use(static_(join(__dirname, '../client-side/build')))
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 5000
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
 })
