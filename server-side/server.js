@@ -10,10 +10,6 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-app.use(static_(join(__dirname, '../client-side/public')))
-
 const RAPID_API_KEY = '462b41c4bcmshef496140a2f7292p1a09dcjsna243ae0d12fb'
 
 const axiosInstance = axios.create({
@@ -90,6 +86,11 @@ app.get('/api/weburl', async (req, res) => {
     }).get().join(' ') // Join all text content into a single string
     res.status(200).send(textContent)
 })
+
+// Serve static files
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+app.use(static_(join(__dirname, '../client-side/public')))
 
 const port = process.env.PORT || 3001
 app.listen(port, () => {
