@@ -16,8 +16,10 @@ const axiosInstance = axios.create({
     timeout: 30000 // 30 seconds
 })
 
+const routes = express.Router()
+
 // Use Rapid APIs to get keyword data
-app.get('/api/keyword', async (req, res) => {
+routes.get('/keyword', async (req, res) => {
     const { keyword } = req.query
     const options = {
         method: 'GET',
@@ -40,7 +42,7 @@ app.get('/api/keyword', async (req, res) => {
     }
 })
 
-app.get('/api/youtube-keyword', async (req, res) => {
+routes.get('/youtube-keyword', async (req, res) => {
     const { keyword } = req.query
     const options = {
         method: 'GET',
@@ -64,7 +66,7 @@ app.get('/api/youtube-keyword', async (req, res) => {
 
 const SCRAPING_BEE_API_KEY = 'VJCE5R3SPXR31PK5AQG150Q0QG1K14IWKCI89KBL7G4DXIPC0N2BAMYYD8EOADM54WRVAJRH8FG5JA9E'
 
-app.get('/api/weburl', async (req, res) => {
+routes.get('/weburl', async (req, res) => {
     const { websiteUrl } = req.query
     const scrapingBeeRes = await axiosInstance.get(`https://app.scrapingbee.com/api/v1?url=${websiteUrl}&json_response=true&api_key=${SCRAPING_BEE_API_KEY}`).then((res) => {
         return res
@@ -86,6 +88,8 @@ app.get('/api/weburl', async (req, res) => {
     }).get().join(' ') // Join all text content into a single string
     res.status(200).send(textContent)
 })
+
+app.use('/api', routes)
 
 // Serve static files
 const __filename = fileURLToPath(import.meta.url)
