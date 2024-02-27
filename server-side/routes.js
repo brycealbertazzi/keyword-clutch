@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { load } from 'cheerio';
 import axios from 'axios';
+
 const routes = Router();
 
 const axiosInstance = axios.create({

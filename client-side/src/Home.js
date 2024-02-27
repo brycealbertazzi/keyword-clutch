@@ -51,6 +51,7 @@ export const Home = ({setTmpHideFooter}) => {
         }
       })
       .catch((error) => {
+        console.log('Error fetching keyword data: ', error)
         setGoogleApiError(true)
         setLoadingTables({...loadingTables, [ResultType.GOOGLE]: false})
       })
@@ -68,6 +69,7 @@ export const Home = ({setTmpHideFooter}) => {
         }
       })
       .catch((error) => {
+        console.log('Error fetching keyword data: ', error)
         setYoutubeApiError(true)
         setLoadingTables({...loadingTables, [ResultType.YOUTUBE]: false})
       })
@@ -92,6 +94,7 @@ export const Home = ({setTmpHideFooter}) => {
         }
       })
       .catch((error) => {
+        console.log('Error fetching url data: ', error)
         setWebUrlApiError(true)
         setLoadingTables({...loadingTables, [ResultType.WEB_URL]: false})
       })
