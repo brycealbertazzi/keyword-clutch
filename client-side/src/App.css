@@ -47,6 +47,10 @@
   background-color: #444;
 }
 
+.hidden-button {
+  display: none;
+}
+
 .app-button:hover {
   transform: scale(1.10);
 }

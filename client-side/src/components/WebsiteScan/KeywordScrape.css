@@ -1,3 +1,13 @@
+.keyword-scrape-action-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: space-between;
+    max-width: 100%;
+    margin: 20px 0;
+    padding: 0 30px;
+}
 
 .keyword-scrape-container {
     display: flex;

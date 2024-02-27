@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import './Home.css'
 import './App.css'
-import { KeywordSuggestAPIData } from './components/KeywordSuggestAPIData'
-import { YoutubeKeywordAPIData } from './components/YoutubeKeywordAPIData'
+import { KeywordSuggestAPIData } from './components/KeywordSearch/KeywordSuggestAPIData'
+import { YoutubeKeywordAPIData } from './components/KeywordSearch/YoutubeKeywordAPIData'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faMagnifyingGlass, faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { InputType, ResultType, ResultTypeColors, extractKeywords } from './Utils'
-import { KeywordScrape } from './components/KeywordScrape'
+import { KeywordScrape } from './components/WebsiteScan/KeywordScrape'
 
 export const Home = ({setTmpHideFooter}) => {
   const [userInput, setUserInput] = useState({
@@ -27,7 +27,7 @@ export const Home = ({setTmpHideFooter}) => {
   const [youtubeSearchResults, setYoutubeSearchResults] = useState(null)
   const [webUrlKeywordResults, setWebUrlKeywordResults] = useState(null)
 
-  const [selectedResultType, setSelectedResultType] = useState(ResultType.GOOGLE)
+  const [selectedResultType, setSelectedResultType] = useState(ResultType.WEB_URL)
 
   const [googleApiError, setGoogleApiError] = useState(false)
   const [youtubeApiError, setYoutubeApiError] = useState(false)
@@ -138,6 +138,12 @@ export const Home = ({setTmpHideFooter}) => {
       {/* Result Type Select Tab: Google or Youtube */}
       <div className="result-type-select">
         <div>
+          <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.WEB_URL ? ResultTypeColors[ResultType.WEB_URL]  : '#555'}} onClick={() => handleChangeResultType(ResultType.WEB_URL)}>
+            Website&nbsp;
+            <FontAwesomeIcon icon={faGlobe} />
+          </button>
+        </div>
+        <div>
           <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.GOOGLE ? ResultTypeColors[ResultType.GOOGLE] : '#555'}} onClick={() => handleChangeResultType(ResultType.GOOGLE)}>
             Google&nbsp;
             <FontAwesomeIcon icon={faGoogle} />
@@ -147,12 +153,6 @@ export const Home = ({setTmpHideFooter}) => {
           <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.YOUTUBE ? ResultTypeColors[ResultType.YOUTUBE]  : '#555'}} onClick={() => handleChangeResultType(ResultType.YOUTUBE)}>
             Youtube&nbsp;
             <FontAwesomeIcon icon={faYoutube} />
-          </button>
-        </div>
-        <div>
-          <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.WEB_URL ? ResultTypeColors[ResultType.WEB_URL]  : '#555'}} onClick={() => handleChangeResultType(ResultType.WEB_URL)}>
-            Website&nbsp;
-            <FontAwesomeIcon icon={faGlobe} />
           </button>
         </div>
       </div>

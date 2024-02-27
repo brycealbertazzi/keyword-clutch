@@ -1,17 +1,20 @@
 import { Router } from 'express';
 import { load } from 'cheerio';
 import axios from 'axios';
+import dotenv from 'dotenv';
 
+dotenv.config()
 const routes = Router();
 
 const axiosInstance = axios.create({
     timeout: 30000 // 30 seconds
 })
 
-const RAPID_API_KEY = '462b41c4bcmshef496140a2f7292p1a09dcjsna243ae0d12fb'
+const RAPID_API_KEY = process.env.RAPID_API_KEY
 
 // Use Rapid APIs to get keyword data
 routes.get('/keyword', async (req, res) => {
+    console.log(process.env.RAPID_API_KEY)
     const { keyword } = req.query
     const options = {
         method: 'GET',
@@ -56,9 +59,10 @@ routes.get('/youtube-keyword', async (req, res) => {
     }
 })
 
-const SCRAPING_BEE_API_KEY = 'VJCE5R3SPXR31PK5AQG150Q0QG1K14IWKCI89KBL7G4DXIPC0N2BAMYYD8EOADM54WRVAJRH8FG5JA9E'
+const SCRAPING_BEE_API_KEY = process.env.SCRAPING_BEE_API_KEY
 
 routes.get('/weburl', async (req, res) => {
+    console.log(process.env.SCRAPING_BEE_API_KEY, process.env.KEYWORD_CLUTCH_OPEN_API_KEY)
     const { websiteUrl } = req.query
     const scrapingBeeRes = await axiosInstance.get(`https://app.scrapingbee.com/api/v1?url=${websiteUrl}&json_response=true&api_key=${SCRAPING_BEE_API_KEY}`).then((res) => {
         return res
@@ -79,6 +83,12 @@ routes.get('/weburl', async (req, res) => {
         return $(element).text().trim()
     }).get().join(' ') // Join all text content into a single string
     res.status(200).send(textContent)
+})
+
+
+const OPEN_AI_KEY =  process.env.KEYWORD_CLUTCH_OPEN_API_KEY
+routes.get('/openai-gpt3', async (req, res) => {
+
 })
 
 export default routes;

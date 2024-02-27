@@ -1,13 +1,16 @@
   /* eslint-disable react-hooks/exhaustive-deps */
   import React, { useEffect, useState } from 'react'
   import './KeywordScrape.css'
-  import '../Home.css'
-  import { LoadingSpinner } from '../LoadingSpinner'
-import { ResultType, ResultTypeColors } from '../Utils'
-import { Error } from './error/Error'
+  import '../../App.css'
+  import { LoadingSpinner } from '../../LoadingSpinner'
+  import { ResultType, ResultTypeColors } from '../../Utils'
+  import { Error } from '../error/Error'
 
   export const KeywordScrape = ({apiData, url, loading, setLoadingTables, apiError}) => {
     const [keywordGroups, setKeywordGroups] = useState([])
+    const [step, setStep] = useState(1)
+    const [stepTitle, setStepTitle] = useState('')
+
     const GROUP_SIZE = 5
 
     useEffect(() => {
@@ -23,11 +26,12 @@ import { Error } from './error/Error'
         tmpGroups.push(newGroup)
       }
       setKeywordGroups(tmpGroups)
+      setStep(1)
     }, [apiData])
 
     useEffect(() => {
       setLoadingTables({...setLoadingTables, [ResultType.WEB_URL]: false})
-  }, [keywordGroups])
+    }, [keywordGroups])
 
     return (
       <div>
@@ -35,7 +39,23 @@ import { Error } from './error/Error'
         {loading && <LoadingSpinner type={ResultType.WEB_URL}/>}
         {apiData && !loading &&
           <div>
-            <h2 className='data-table-title'>Keywords for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>
+            <div className='keyword-scrape-action-items'>
+              <div>
+                <button className={step <= 1 ? 'hidden-button' : 'app-button'} onClick={() => setStep((step) => step - 1)}>
+                  Back&nbsp;
+                </button>
+              </div>
+              <div>
+                {step === 1 && <h2 style={{textAlign: 'center'}}>Keywords for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>}
+                {step === 2 && <h2 style={{textAlign: 'center'}}>Select keywords for SEO optimization</h2>}
+                {step === 3 && <h2 style={{textAlign: 'center'}}>SEO Optimized text for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>}
+              </div>
+              <div>
+                <button className={step >= 3 ? 'hidden-button' : 'app-button'} onClick={() => setStep((step) => step + 1)}>
+                  Next&nbsp;
+                </button>
+              </div>
+            </div>
             <div className='keyword-scrape-container'>
               <div className='keyword-display'>
                 {keywordGroups.map((keywordGroup, index) => {
