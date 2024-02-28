@@ -14,7 +14,6 @@ const RAPID_API_KEY = process.env.RAPID_API_KEY
 
 // Use Rapid APIs to get keyword data
 routes.get('/keyword', async (req, res) => {
-    console.log(process.env.RAPID_API_KEY)
     const { keyword } = req.query
     const options = {
         method: 'GET',
@@ -62,7 +61,6 @@ routes.get('/youtube-keyword', async (req, res) => {
 const SCRAPING_BEE_API_KEY = process.env.SCRAPING_BEE_API_KEY
 
 routes.get('/weburl', async (req, res) => {
-    console.log(process.env.SCRAPING_BEE_API_KEY, process.env.KEYWORD_CLUTCH_OPEN_API_KEY)
     const { websiteUrl } = req.query
     const scrapingBeeRes = await axiosInstance.get(`https://app.scrapingbee.com/api/v1?url=${websiteUrl}&json_response=true&api_key=${SCRAPING_BEE_API_KEY}`).then((res) => {
         return res
