@@ -26,7 +26,7 @@ export const KeywordSuggestAPIData = ({apiData, keyword, loading, setLoadingTabl
         <div>
         {apiError && <Error resultType={ResultType.GOOGLE} input={keyword}/>}
         {loading && <LoadingSpinner type={ResultType.GOOGLE}/>}
-        {apiData && !loading &&
+        {apiData && !loading && !apiError &&
             <div>
                 <h2 style={{textAlign: 'center'}}>Google Search Results for <span style={{color: ResultTypeColors[ResultType.GOOGLE]}}>{keyword}</span></h2>
                 <div className="data-container" style={{borderColor: ResultTypeColors[ResultType.GOOGLE]}}>

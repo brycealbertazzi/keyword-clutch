@@ -79,7 +79,12 @@ export const Home = ({setTmpHideFooter}) => {
     const currentUrl = userInput[InputType.URL]
     if (currentUrl.length <= 0) return
     setUrl(currentUrl)
-    const modifiedUrl = !currentUrl.startsWith('https') && !currentUrl.startsWith('http') ? `https://${currentUrl}` : currentUrl
+    let modifiedUrl = !currentUrl.startsWith('https') && !currentUrl.startsWith('http') ? `https://${currentUrl}` : currentUrl
+    // Add www to url
+    if (!modifiedUrl.includes('www.')) {
+      const urlParts = modifiedUrl.split('://')
+      modifiedUrl = `${urlParts[0]}://www.${urlParts[1]}`
+    }
     setLoadingTables({...loadingTables, [ResultType.WEB_URL]: true})
     setWebUrlApiError(false)
     axios.get(`/api/weburl?websiteUrl=${modifiedUrl}`)

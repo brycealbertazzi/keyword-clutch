@@ -37,7 +37,7 @@
       <div>
         {apiError && <Error resultType={ResultType.WEB_URL} input={url}/>}
         {loading && <LoadingSpinner type={ResultType.WEB_URL}/>}
-        {apiData && !loading &&
+        {apiData && !loading && !apiError &&
           <div>
             <div className='keyword-scrape-action-items'>
               <div>

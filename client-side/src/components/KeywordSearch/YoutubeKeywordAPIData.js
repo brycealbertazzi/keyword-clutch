@@ -26,7 +26,7 @@ export const YoutubeKeywordAPIData = ({apiData, keyword, loading, setLoadingTabl
         <div>
         {apiError && <Error resultType={ResultType.YOUTUBE} input={keyword}/>}
         {loading && <LoadingSpinner type={ResultType.YOUTUBE}/>}
-        {apiData && !loading &&
+        {apiData && !loading && !apiError &&
             <div>
                 <h2 style={{textAlign: 'center'}}>Youtube Search results for <span style={{color: ResultTypeColors[ResultType.YOUTUBE]}}>{keyword}</span></h2>
                 {/* Data table */}
