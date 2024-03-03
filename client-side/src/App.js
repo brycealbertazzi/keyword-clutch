@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Home } from "./Home"
 import './App.css'
@@ -9,7 +9,6 @@ import { LandingPage } from './LandingPage'
 
 
 function App() {
-  const [tmpHideFooter, setTmpHideFooter] = useState(false)
 
   return (
     <Router>
@@ -18,9 +17,9 @@ function App() {
           <Navbar />
           <Routes>
             <Route exact path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home setTmpHideFooter={setTmpHideFooter}/>} />
+            <Route path="/home" element={<Home/>} />
           </Routes>
-          {!tmpHideFooter && <Footer />}
+          <Footer />
         </div>
       </GlobalStateProvider>
     </Router>

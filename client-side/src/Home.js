@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import './Home.css'
 import './App.css'
@@ -9,8 +9,11 @@ import { faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faMagnifyingGlass, faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { InputType, ResultType, ResultTypeColors, extractKeywords } from './Utils'
 import { KeywordScrape } from './components/WebsiteScan/KeywordScrape'
+import GlobalContext from './global/GlobalContext'
 
-export const Home = ({setTmpHideFooter}) => {
+export const Home = () => {
+  const globalContext = useContext(GlobalContext)
+  const { setTmpHideFooter, setWebsiteSEOStep } = globalContext
   const [userInput, setUserInput] = useState({
     [InputType.KEYWORD]: '',
     [InputType.URL]: ''
@@ -32,6 +35,9 @@ export const Home = ({setTmpHideFooter}) => {
   const [googleApiError, setGoogleApiError] = useState(false)
   const [youtubeApiError, setYoutubeApiError] = useState(false)
   const [webUrlApiError, setWebUrlApiError] = useState(false)
+
+  const [websiteText, setWebsiteText] = useState('')
+  const [optimizedKeywords, setOptimizedKeywords] = useState([])
 
   const submitKeyword = () => {
     const currentKeyword = userInput[InputType.KEYWORD]
@@ -76,6 +82,8 @@ export const Home = ({setTmpHideFooter}) => {
   }
 
   const submitWebUrl = () => {
+    setOptimizedKeywords([])
+    setWebsiteSEOStep(1)
     const currentUrl = userInput[InputType.URL]
     if (currentUrl.length <= 0) return
     setUrl(currentUrl)
@@ -90,6 +98,8 @@ export const Home = ({setTmpHideFooter}) => {
     axios.get(`/api/weburl?websiteUrl=${modifiedUrl}`)
       .then((response) => {
         const websiteText = response?.data
+        console.log(websiteText)
+        setWebsiteText(websiteText)
         if (websiteText && websiteText.length > 0) {
           const extractedKeywords = extractKeywords(websiteText)
           setWebUrlKeywordResults(extractedKeywords)
@@ -171,7 +181,18 @@ export const Home = ({setTmpHideFooter}) => {
       {/* Data Grids */}
       {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={googleSearchResults ? googleSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.GOOGLE]} setLoadingTables={setLoadingTables} apiError={googleApiError}/>}
       {selectedResultType === ResultType.YOUTUBE && <YoutubeKeywordAPIData apiData={youtubeSearchResults ? youtubeSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.YOUTUBE]} setLoadingTables={setLoadingTables} apiError={youtubeApiError}/>}
-      {selectedResultType === ResultType.WEB_URL && <KeywordScrape apiData={webUrlKeywordResults ? webUrlKeywordResults : null} url={url} loading={loadingTables[ResultType.WEB_URL]} setLoadingTables={setLoadingTables} apiError={webUrlApiError}/>}
+      {selectedResultType === ResultType.WEB_URL && 
+        <KeywordScrape 
+          apiData={webUrlKeywordResults ? webUrlKeywordResults : null} 
+          url={url} 
+          loading={loadingTables[ResultType.WEB_URL]} 
+          setLoadingTables={setLoadingTables} 
+          apiError={webUrlApiError} 
+          websiteText={websiteText} 
+          optimizedKeywords={optimizedKeywords}  
+          setOptimizedKeywords={setOptimizedKeywords}
+        />
+      }
     </div>
   )
 }

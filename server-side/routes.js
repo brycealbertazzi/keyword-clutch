@@ -3,6 +3,7 @@ import { load } from 'cheerio';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import puppeteer from 'puppeteer';
+import OpenAI from 'openai';
 
 dotenv.config()
 const routes = Router();
@@ -100,10 +101,33 @@ routes.get('/weburl', async (req, res) => {
     res.status(200).send(textContent)
 })
 
-
 const OPEN_AI_KEY =  process.env.KEYWORD_CLUTCH_OPEN_API_KEY
-routes.get('/openai-gpt3', async (req, res) => {
+const openAIClient = new OpenAI({baseURL: 'https://api.openai.com/v1', apiKey: OPEN_AI_KEY, organization: null})
 
+async function callGPTAPI(websiteText, optimizedKeywords) {
+    // API endpoint for GPT-3.5-turbo-0125
+    const prompt = `Optimize the following website text for SEO, limit the response to 700 words, but try to make the response as complete as possible. Use the delimiter "*del*" to separate sections of the website in the returned string. 
+    Try to have the sections start wherever there is a colon. Try to have about one section per 100 words. "Website text: ${websiteText}". Keywords: ${optimizedKeywords}}.`
+
+    /* gpt-3.5-turbo-0613 */
+    // Make the HTTP POST request to the OpenAI API
+    const completion = await openAIClient.chat.completions.create({
+        messages: [
+            { role: "user", content: prompt },
+        ],
+        model: "gpt-3.5-turbo-0613",
+        max_tokens: 700,
+        temperature: 0.5,
+    })
+    // Parse and return response
+    return completion
+}
+
+routes.post('/openai-gpt3', async (req, res) => {
+    const { websiteText, optimizedKeywords } = req.body
+    const response = await callGPTAPI(websiteText, optimizedKeywords)
+    console.log(JSON.stringify(response))
+    res.send(response.choices[0].message.content).status(200)
 })
 
 export default routes;

@@ -55,4 +55,27 @@
     padding: 1rem;
     text-align: center;
     padding: 15px 0;
+    cursor: pointer;
+}
+
+.optimized-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    border: 3px solid #ad9f2f;
+    max-width: 1360px;
+}
+
+.optimized-text-section {
+    width: 100%;
+    border-bottom: 1px dotted #ccc;
+    padding: 20px 0;
+}
+
+.optimized-text-section:last-child {
+    border-bottom: none;
 }

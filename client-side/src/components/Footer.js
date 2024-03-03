@@ -1,42 +1,49 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import './Footer.css'
+import GlobalContext from '../global/GlobalContext'
 import KeywordClutchLogo from '../keyword-clutch.png'
 
 export const Footer = () => {
+    const globalContext = useContext(GlobalContext)
+    const { tmpHideFooter } = globalContext
 
-    return (
-        <footer className='footer-container'>
+    if (!tmpHideFooter) {
+        return (
             <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                <footer className='footer-container'>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <p>© 2024 Rank Rocket API</p>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                    <div>
+                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
+                    </div>
+                </footer>
             </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <p>© 2024 Rank Rocket API</p>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-            <div>
-                <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-            </div>
-        </footer>
-    )
+        )
+    } else return null
 }
