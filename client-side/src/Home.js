@@ -98,7 +98,6 @@ export const Home = () => {
     axios.get(`/api/weburl?websiteUrl=${modifiedUrl}`)
       .then((response) => {
         const websiteText = response?.data
-        console.log(websiteText)
         setWebsiteText(websiteText)
         if (websiteText && websiteText.length > 0) {
           const extractedKeywords = extractKeywords(websiteText)

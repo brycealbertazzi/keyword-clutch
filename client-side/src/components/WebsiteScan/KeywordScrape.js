@@ -11,7 +11,7 @@
 
   export const KeywordScrape = ({apiData, url, loading, setLoadingTables, apiError, websiteText, optimizedKeywords, setOptimizedKeywords}) => {
     const globalContext = useContext(GlobalContext)
-    const { optimizedText, setOptimizedText, websiteSEOStep, setWebsiteSEOStep } = globalContext
+    const { websiteSEOStep, setWebsiteSEOStep, optimizedText, setOptimizedText } = globalContext
 
     const [keywordGroups, setKeywordGroups] = useState([])
     const [optimizedTextSections, setOptimizedTextSections] = useState([])
@@ -25,7 +25,9 @@
         optimizedKeywords,
       })
       .then((res) => {
-        setOptimizedText(res.data)
+        let optimizedText = res.data
+        optimizedText.replace(/\n/g, '')
+        setOptimizedText(optimizedText)
       })
       .catch((error) => {
         console.error('Error:', error)
@@ -42,15 +44,15 @@
       }
     }
 
-    const updateOptimizedTextSections = () => {
+    useEffect(() => {
       let optimizedTextSections = optimizedText.split('*del*')
       optimizedTextSections = optimizedTextSections.filter((section) => section.length > 0 && !section.includes('Keywords:'))
       setOptimizedTextSections(optimizedTextSections)
-    }
+    }, [optimizedText])
 
     useEffect(() => {
-      updateOptimizedTextSections()
-    }, [optimizedText])
+      console.log(optimizedTextSections)
+    }, [optimizedTextSections])
 
     useEffect(() => {
       if (!apiData) return
@@ -65,16 +67,11 @@
         tmpGroups.push(newGroup)
       }
       setKeywordGroups(tmpGroups)
-      updateOptimizedTextSections()
     }, [apiData])
 
     useEffect(() => {
       setLoadingTables({...setLoadingTables, [ResultType.WEB_URL]: false})
     }, [keywordGroups])
-
-    useEffect(() => {
-      console.log(websiteSEOStep)
-    }, [websiteSEOStep])
 
     return (
       <div>
@@ -100,19 +97,35 @@
             {websiteSEOStep === 2 ?
               <div className='optimized-text-container'>
                 {optimizedTextSections.map((section, index) => {
-                  const sectionSplit = section.split(':')
-                  const header = sectionSplit[0].replace(':', '')
-                  let content = sectionSplit[1] ? sectionSplit[1] : ''
-                  const LONG_HEADER = header.length > 30
-                  if (LONG_HEADER > 30) {
-                    content = header.concat(content)
+                  var pattern = /(?<=\d):(?=\d)/g
+                  const disallowedHeaders = ['Website text', 'SEO Optimized text', 'Optimized text']
+                  // Use replace method with the pattern to remove colons
+                  var modifiedSectionStr = section.replace(pattern, '')
+                  let sectionSplit = modifiedSectionStr.split(':')
+                  sectionSplit = sectionSplit.filter((section) => !disallowedHeaders.includes(section))
+                  console.log(sectionSplit)
+                  if (sectionSplit.length > 2) {
+                    return (
+                      <div key={index} className='optimized-text-section'> 
+                        {sectionSplit.map((split, idx) => {
+                          return (<p key={idx} style={{textAlign: 'center', lineHeight: '1.75em'}}>{split}</p>)
+                        })}
+                      </div>
+                    )
+                  } else {
+                    const header = sectionSplit[0].replace(':', '')
+                    let content = sectionSplit[1] ? sectionSplit[1] : ''
+                    const LONG_HEADER = header.length > 30
+                    if (LONG_HEADER > 30) {
+                      content = header.concat(content)
+                    }
+                    return (
+                      <div key={index} className='optimized-text-section'>
+                        {content && !LONG_HEADER && <h3 style={{textAlign: 'center'}}>{header}</h3>}
+                        <p style={{textAlign: 'center', lineHeight: '1.75em'}}>{content ? content : header}</p>
+                      </div>
+                    )
                   }
-                  return (
-                    <div key={index} className='optimized-text-section'>
-                      {content && !LONG_HEADER && <h3 style={{textAlign: 'center'}}>{header}</h3>}
-                      <p style={{textAlign: 'center'}}>{content ? content : header}</p>
-                    </div>
-                  )
                 })}
               </div>
             :
