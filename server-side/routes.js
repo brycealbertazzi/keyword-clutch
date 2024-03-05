@@ -4,6 +4,8 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import puppeteer from 'puppeteer';
 import OpenAI from 'openai';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
 
 dotenv.config()
 const routes = Router();
@@ -60,9 +62,14 @@ routes.get('/youtube-keyword', async (req, res) => {
     }
 })
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 async function puppeteerScrapeWebsite(url) {
     // Launch a headless Chromium browser
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
+        headless: true,
+    });
   
     // Open a new page
     const page = await browser.newPage();
