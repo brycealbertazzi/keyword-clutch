@@ -69,6 +69,7 @@ async function puppeteerScrapeWebsite(url) {
     const browser = await puppeteer.launch({
         headless: true,
         executablePath: process.env.CHROME_BIN || null,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     })
   
     // Open a new page
