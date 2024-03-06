@@ -67,9 +67,9 @@ const __dirname = dirname(__filename)
 async function puppeteerScrapeWebsite(url) {
     // Launch a headless Chromium browser
     const browser = await puppeteer.launch({
-        cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
         headless: true,
-    });
+        executablePath: process.env.CHROME_BIN || null,
+    })
   
     // Open a new page
     const page = await browser.newPage();
