@@ -1,0 +1,109 @@
+/* Styles for card element container */
+.stripe-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 25px;
+    padding: 20px;
+    min-height: calc(100vh - 345px);
+}
+
+.stripe-payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px 30px 30px 30px;
+    background-color: #333;
+}
+
+.stripe-step-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.stripe-payment-section {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px 0;
+}
+
+.stripe-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.stripe-field {
+    width: 45%;
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stripe-full-field {
+    width: 100%;
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+select {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #333;
+    color: #ccc;
+}
+
+.stripe-form-header {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: white;
+    margin: 0 0 20px 0;
+}
+
+.stripe-input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 0.5px solid #ccc;
+    border-radius: 5px;
+    color: #ccc;
+    background-color: #333;
+}
+
+.stripe-label {
+    display: block; /* Display as block to ensure it's below the input */
+    font-size: 14px; /* Adjust font size as needed */
+    color: #ccc; /* Color for discreet visibility */
+}
+
+/* Styles for card element */
+.StripeElement {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #ccc;
+    max-width: 100%;
+}
+
+/* Placeholder text color */
+.StripeElement--webkit-autofill::placeholder {
+    color: #aab7c4;
+}
+
+/* Invalid input text color */
+.StripeElement--invalid {
+    border-color: #fa755a;
+}

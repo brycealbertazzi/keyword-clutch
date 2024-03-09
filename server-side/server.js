@@ -1,15 +1,21 @@
 import express, {static as static_} from 'express'
 import cors from 'cors'
+import bodyParser from 'body-parser'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
-import routes from './routes.js'
+import dataRoutes from './routes.js'
+import stripeRoutes from './stripe.js'
+
 
 const app = express()
 
 // API Middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(cors())
 app.use(express.json())
-app.use('/api', routes)
+app.use('/api/data', dataRoutes)
+app.use('/api/stripe', stripeRoutes)
 
 // Serve static files
 const __filename = fileURLToPath(import.meta.url)

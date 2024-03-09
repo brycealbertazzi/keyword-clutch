@@ -20,7 +20,7 @@
 
     const optimizeForKeywords = () => {
       setLoadingTables({...setLoadingTables, [ResultType.WEB_URL]: true})
-      axios.post('/api/openai-gpt3', {
+      axios.post('/api/data/openai-gpt3', {
         websiteText,
         optimizedKeywords,
       })

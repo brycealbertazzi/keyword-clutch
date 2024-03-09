@@ -47,7 +47,7 @@ export const Home = () => {
     setLoadingTables({...loadingTables, [ResultType.GOOGLE]: true, [ResultType.YOUTUBE]: true})
     setGoogleApiError(false)
     setYoutubeApiError(false)
-    axios.get(`/api/keyword?keyword=${currentKeyword}`)
+    axios.get(`/api/data/keyword?keyword=${currentKeyword}`)
       .then((response) => {
         const googleKeywordData = response?.data?.data?.related_kw
         setGoogleSearchResults(googleKeywordData)
@@ -63,7 +63,7 @@ export const Home = () => {
       })
     
     // Retrieve keyword data from the Keyword Research for YouTube API
-    axios.get(`/api/youtube-keyword?keyword=${currentKeyword}`)
+    axios.get(`/api/data/youtube-keyword?keyword=${currentKeyword}`)
       .then((response) => {
         let youtubeKeywordData = []
         if (response?.data?.exact_keyword) youtubeKeywordData = youtubeKeywordData.concat(response?.data?.exact_keyword)
@@ -95,7 +95,7 @@ export const Home = () => {
     }
     setLoadingTables({...loadingTables, [ResultType.WEB_URL]: true})
     setWebUrlApiError(false)
-    axios.get(`/api/weburl?websiteUrl=${modifiedUrl}`)
+    axios.get(`/api/data/weburl?websiteUrl=${modifiedUrl}`)
       .then((response) => {
         const websiteText = response?.data
         setWebsiteText(websiteText)

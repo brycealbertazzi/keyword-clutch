@@ -6,22 +6,24 @@ import { Navbar } from "./components/Navbar"
 import { Footer } from "./components/Footer"
 import { GlobalStateProvider } from './global/GlobalState'
 import { LandingPage } from './LandingPage'
+import { StripeContainer } from './components/stripe/StripeContainer';
 
 
 function App() {
 
   return (
     <Router>
-      <GlobalStateProvider>
-        <div className="App">
-          <Navbar />
-          <Routes>
-            <Route exact path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home/>} />
-          </Routes>
-          <Footer />
-        </div>
-      </GlobalStateProvider>
+        <GlobalStateProvider>
+          <div className="App">
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/home" element={<Home/>} />
+              <Route path="/payment" element={<StripeContainer />} />
+            </Routes>
+            <Footer />
+          </div>
+        </GlobalStateProvider>
     </Router>
   )
 }
