@@ -15,6 +15,11 @@ const reducer = (state, action) => {
                 ...state,
                 websiteSEOStep: action.payload
             }
+        case 'STRIPE_CUSTOMER':
+            return {
+                ...state,
+                stripeCustomer: action.payload
+            }
         default:
         return state
     }

@@ -8,6 +8,7 @@ export const GlobalStateProvider = ({ children }) => {
         optimizedText: '',
         tmpHideFooter: false,
         websiteSEOStep: 1,
+        stripeCustomer: null,
     }
     
     const [state, dispatch] = useReducer(Reducer, initialState)
@@ -24,6 +25,10 @@ export const GlobalStateProvider = ({ children }) => {
         dispatch({ type: 'WEBSITE_SEO_STEP', payload })
     }
 
+    const setStripeCustomer = (payload) => {
+        dispatch({ type: 'STRIPE_CUSTOMER', payload })
+    }
+
     return (
         <GlobalContext.Provider value={{
             optimizedText: state.optimizedText,
@@ -32,8 +37,10 @@ export const GlobalStateProvider = ({ children }) => {
             setTmpHideFooter,
             websiteSEOStep: state.websiteSEOStep,
             setWebsiteSEOStep,
+            stripeCustomer: state.stripeCustomer,
+            setStripeCustomer,
         }}>
-        {children}
+            {children}
         </GlobalContext.Provider>
     )
 }

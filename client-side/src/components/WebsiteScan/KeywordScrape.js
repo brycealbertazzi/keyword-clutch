@@ -51,10 +51,6 @@
     }, [optimizedText])
 
     useEffect(() => {
-      console.log(optimizedTextSections)
-    }, [optimizedTextSections])
-
-    useEffect(() => {
       if (!apiData) return
       var tmpGroups = []
       for (let i = 0; i < apiData.length; i += GROUP_SIZE) {

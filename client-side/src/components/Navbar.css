@@ -9,3 +9,40 @@
     box-sizing: border-box;
     border-bottom: 1px solid white;
 }
+
+/* Account menu */
+.account-menu {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+}
+
+.account-dropdown {
+    position: absolute;
+    top: 40px; /* Adjust as needed */
+    right: 0;
+    background-color: #222;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+    min-width: 150px;
+    z-index: 1;
+}
+
+.account-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    text-wrap: nowrap;
+}
+
+.account-dropdown button:hover {
+    background-color: #444;
+}
+

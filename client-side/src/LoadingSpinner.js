@@ -9,12 +9,14 @@ export const LoadingSpinner = ({type}) => {
   return (
     <div className='spinner-container'>
         <div className="spinner">
-            <FontAwesomeIcon 
+            {type &&
+              <FontAwesomeIcon 
                 className='loading-icon' 
                 icon={type === ResultType.GOOGLE ? faGoogle : type === ResultType.YOUTUBE ? faYoutube : faGlobe} 
                 color={type === ResultType.GOOGLE ? ResultTypeColors[ResultType.GOOGLE] : type === ResultType.YOUTUBE ? ResultTypeColors[ResultType.YOUTUBE] : ResultTypeColors[ResultType.WEB_URL]} 
                 size='3x'
-            />&nbsp;
+              />
+            }&nbsp;
         </div>
     </div>
   )

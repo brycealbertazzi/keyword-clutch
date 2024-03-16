@@ -1,3 +1,8 @@
+export const NavbarTitles = {
+    LANDING_PAGE: 'WELCOME TO KEYWORD CLUTCH',
+    HOME_PAGE: 'KEYWORD CLUTCH',
+    ACCOUNT_PAGE: 'MANAGE ACCOUNT'
+}
 
 export const ResultType = {
     GOOGLE: 'google',
