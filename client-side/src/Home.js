@@ -148,7 +148,7 @@ export const Home = () => {
   }
 
   return (
-    <div className='home-pg-content'>
+    <div className='page-content'>
       {/* Result Type Select Tab: Google or Youtube */}
       <div className="result-type-select">
         <div>

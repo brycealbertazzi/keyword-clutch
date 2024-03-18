@@ -135,6 +135,7 @@ routes.post('/subscribe', cors(), async (req, res) => {
         trial_end: 'now', // End the trial immediately
         billing_cycle_anchor: 'now', // Set the next billing cycle to now
         proration_behavior: 'create_prorations', // Prorate charges for changes immediately
+        cancel_at_period_end: false, // Set the subscription to renew after the current period
       })
       console.log('subscription', updatedSubscription)
       res.status(200).json({ updatedSubscription })
@@ -159,13 +160,65 @@ routes.post('/start-free-trial', async (req, res) => {
       customer: customer.id,
       items: [{ price: process.env.TEST_KEYWORD_CLUTCH_STRIPE_PRICE_ID }],
       trial_period_days: 3, // # of days for the trial period
-      cancel_at_period_end: true, // Automatically cancel the subscription at the end of the trial period
+      cancel_at_period_end: false, // Set the subscripion to renew after the trial period
     })
 
     res.status(200).json({ subscription })
   } catch (error) {
     console.error('Error starting free trial:', error)
     res.status(500).json({ error: 'An error occurred while starting the free trial.' })
+  }
+})
+
+// Endpoint to cancel a subscription
+routes.post('/cancel-subscription', async (req, res) => {
+  try {
+      const { subscriptionId } = req.body
+      const canceledSubscription = await stripe.subscriptions.update(subscriptionId, {
+          cancel_at_period_end: true // Set subscription to cancel at the end of the current period
+      })
+      res.json({ message: 'Subscription canceled successfully', canceledSubscription })
+  } catch (error) {
+      res.status(500).json({ error: error.message })
+  }
+})
+
+// Endpoint to renew a subscription
+routes.post('/renew-subscription', async (req, res) => {
+  try {
+      const { subscriptionId } = req.body
+
+      // Retrieve the subscription
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+
+      if (subscription.status === 'active') {
+          // Subscription is still active, set it to renew at the original date
+          const renewedSubscription = await stripe.subscriptions.update(subscriptionId, {
+              cancel_at_period_end: false // Set the subscription to renew after the current period
+          })
+          res.json({ message: 'Subscription renewed successfully', renewedSubscription })
+      } else {
+          // Subscription has reached the end of its billing cycle, create an invoice
+          const invoice = await stripe.invoices.create({
+              customer: subscription.customer,
+              subscription: subscriptionId
+          })
+
+          // Pay the invoice immediately
+          await stripe.invoices.pay(invoice.id)
+
+          // Retrieve the latest subscription data after the invoice is paid
+          const updatedSubscription = await stripe.subscriptions.retrieve(subscriptionId)
+
+          // Reactivate the subscription
+          const reactivatedSubscription = await stripe.subscriptions.update(subscriptionId, {
+              cancel_at_period_end: false // Set the subscription to renew after the current period
+          })
+
+          res.json({ message: 'Subscription renewed successfully', updatedSubscription, reactivatedSubscription })
+      }
+  } catch (error) {
+      res.status(500).json({ error: error.message })
   }
 })
 

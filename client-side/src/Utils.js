@@ -1,7 +1,8 @@
 export const NavbarTitles = {
     LANDING_PAGE: 'WELCOME TO KEYWORD CLUTCH',
     HOME_PAGE: 'KEYWORD CLUTCH',
-    ACCOUNT_PAGE: 'MANAGE ACCOUNT'
+    ACCOUNT_PAGE: 'MANAGE ACCOUNT',
+    PRICING: 'PRICING'
 }
 
 export const ResultType = {
@@ -19,6 +20,16 @@ export const ResultTypeColors = {
     [ResultType.GOOGLE]: '#4285F4',
     [ResultType.YOUTUBE]: '#f44242',
     [ResultType.WEB_URL]: '#ad9f2f'
+}
+
+export const SubscriptionTypes = {
+    TRIALING: 'trialing',
+    ACTIVE: 'active'
+}
+
+export const SubscriptionTypeLabels = {
+    [SubscriptionTypes.TRIALING]: 'Free Trial',
+    [SubscriptionTypes.ACTIVE]: 'Active Subscription',
 }
 
 const StopWords = {

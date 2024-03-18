@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './Navbar.css'
 import '../App.css'
 import GlobalContext from '../global/GlobalContext'
@@ -8,73 +8,76 @@ import KeywordClutchLogo from '../keyword-clutch.png'
 import { SignedIn, SignedOut, SignInButton, useUser, useClerk } from "@clerk/clerk-react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { NavbarTitles } from '../Utils'
+import { NavbarTitles, SubscriptionTypes } from '../Utils'
 import axios from 'axios'
 
 export const Navbar = () => {
     const globalContext = useContext(GlobalContext)
-    const navigate = useNavigate()
     const location = useLocation()
+    const navigate = useNavigate()
     const { stripeCustomer, setStripeCustomer } = globalContext
-    const { user } = useUser()
+    const { user, isSignedIn } = useUser()
     const { signOut } = useClerk()
 
     const [showDropdown, setShowDropdown] = useState(false)
     const [pageTitle, setPageTitle] = useState('')
-    const [loading, setLoading] = useState(false)
 
     const fetchStripeCustomer = async () => {
         if (!user?.primaryEmailAddress?.emailAddress) return
         await axios.get('/api/stripe/get-customer-data', { customerEmail: user.primaryEmailAddress.emailAddress }).then(res => {
-            console.log(res?.data)
             setStripeCustomer(res?.data)
         })
     }
 
-    const navigateToLandingPage = () => {
-        setPageTitle(NavbarTitles.LANDING_PAGE)
-        navigate('/')
-    }
-
-    const navigateToHomePage = () => {
-        setPageTitle(NavbarTitles.HOME_PAGE)
-        navigate('/home')
+    const handleLogoClick = () => {
+        if (isSignedIn && (stripeCustomer?.customerSubscription?.status === SubscriptionTypes.ACTIVE || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING)) {
+            navigate('/home')
+        } else {
+            navigate('/')
+        }
     }
 
     useEffect(() => {  
-        if (!user?.primaryEmailAddress?.emailAddress) {
-            navigateToLandingPage()
-            return
-        }
         fetchStripeCustomer()
     }, [user])
 
     useEffect(() => {
+        console.log(stripeCustomer)
         if (!stripeCustomer?.customerSubscription?.status) {
-            navigateToLandingPage()
+            if (isSignedIn) navigate('/pricing')
+            else navigate('/')
             return
         }
-        if (stripeCustomer?.customerSubscription?.status === 'active' || stripeCustomer?.customerSubscription?.status === 'trialing') {
-            navigateToHomePage()
+        if (stripeCustomer?.customerSubscription?.status === SubscriptionTypes.ACTIVE || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) {
+            navigate('/home')
         } else {
-            navigateToLandingPage()
+            navigate('/')
         }
     }, [stripeCustomer])
 
+    useEffect(() => {
+        switch(location.pathname) {
+            case '/':
+                setPageTitle(NavbarTitles.LANDING_PAGE)
+                break
+            case '/home':
+                setPageTitle(NavbarTitles.HOME_PAGE)
+                break
+            case '/account':
+                setPageTitle(NavbarTitles.ACCOUNT_PAGE)
+                break
+            case '/pricing':
+                setPageTitle(NavbarTitles.PRICING)
+                break
+            default:
+                setPageTitle(NavbarTitles.LANDING_PAGE)
+                break
+        }
+    }, [location])
+
     return (
         <div className='nav-container'>
-            <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' onClick={() => {
-                switch (location.pathname) {
-                    case '/pricing':
-                        navigateToLandingPage()
-                        break
-                    case '/account':
-                        navigateToHomePage()
-                        break
-                    default:
-                        break
-                }
-            }}/>
+            <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' onClick={() => handleLogoClick()}/>
             <h1>{pageTitle}</h1>
             <div className='nav-right'>
                 <SignedOut>

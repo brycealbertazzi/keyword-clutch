@@ -11,7 +11,7 @@ export const LandingPage = () => {
   const navigate = useNavigate()
 
   return (
-    <div className='landing-pg-content'>
+    <div className='page-content'>
         <div className='landing-pg-left'>
           <div className='bulletpoint-container'>
             <h1 style={{fontSize: '45px'}}>The most handy SEO keyword reasearch tool</h1>

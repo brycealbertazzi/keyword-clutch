@@ -6,6 +6,7 @@ import './Pricing.css'
 import '../App.css'
 import { useUser, SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
 import axios from 'axios'
+import { SubscriptionTypes } from '../Utils'
 
 export const Pricing = () => {
     const globalContext = useContext(GlobalContext)
@@ -29,7 +30,7 @@ export const Pricing = () => {
     }
 
     return (
-        <div className='pricing-pg-content'>
+        <div className='page-content'>
             <div className='pricing-card '>
                 <p>Get access to all of our features</p>
                 <p>Unlimited Google keyword searches</p>
@@ -39,16 +40,16 @@ export const Pricing = () => {
                 <h3>Just $10.00/month</h3>
                 <div className='pricing-pg-buttons'>
                     <SignedOut>
-                        <SignInButton className='app-button'>
+                        <SignInButton className='app-button' redirectUrl='/pricing'>
                             Free Trial
                         </SignInButton>
-                        <SignInButton className='app-button'>
+                        <SignInButton className='app-button' redirectUrl='/pricing'>
                             Subscribe
                         </SignInButton>
                     </SignedOut>
                     <SignedIn>
                         {!stripeCustomer?.customerData && <button className='app-button' onClick={startFreeTrial}>Free Trial</button>}
-                        {(!stripeCustomer?.customerData || (stripeCustomer?.customerSubscription && stripeCustomer?.customerSubscription?.status === 'trialing')) && <button className='app-button' onClick={subscribe}>Subscribe</button>}
+                        {(!stripeCustomer?.customerData || !stripeCustomer?.customerSubscription || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) && <button className='app-button' onClick={subscribe}>Subscribe</button>}
                     </SignedIn>
                 </div>
             </div>
