@@ -5,7 +5,7 @@ import { useUser } from '@clerk/clerk-react'
 import axios from 'axios'
 import './UserAccount.css'
 import '../App.css'
-import { SubscriptionTypeLabels, SubscriptionTypes } from '../Utils'
+import { SubscriptionTypeLabels, SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
 
 export const ManageAccount = () => {
     const globalContext = useContext(GlobalContext)
@@ -90,7 +90,7 @@ export const ManageAccount = () => {
                     </div>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>{renderNextBillingCycleLabel()}</h3>
-                        <p>{new Date(stripeCustomer?.customerSubscription?.current_period_end * 1000).toLocaleDateString('en-US')}</p>
+                        <p>{convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}</p>
                     </div>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>Payment Method</h3>

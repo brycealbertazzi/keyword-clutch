@@ -9,6 +9,11 @@ export const GlobalStateProvider = ({ children }) => {
         tmpHideFooter: false,
         websiteSEOStep: 1,
         stripeCustomer: null,
+        popUpModalData: {
+            open: false,
+            header: '',
+            message: '',
+        }
     }
     
     const [state, dispatch] = useReducer(Reducer, initialState)
@@ -29,6 +34,10 @@ export const GlobalStateProvider = ({ children }) => {
         dispatch({ type: 'STRIPE_CUSTOMER', payload })
     }
 
+    const setPopUpModalData = (payload) => {
+        dispatch({ type: 'POP_UP_MODAL_DATA', payload })
+    }
+
     return (
         <GlobalContext.Provider value={{
             optimizedText: state.optimizedText,
@@ -39,6 +48,8 @@ export const GlobalStateProvider = ({ children }) => {
             setWebsiteSEOStep,
             stripeCustomer: state.stripeCustomer,
             setStripeCustomer,
+            popUpModalData: state.popUpModalData,
+            setPopUpModalData
         }}>
             {children}
         </GlobalContext.Provider>

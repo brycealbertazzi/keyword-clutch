@@ -102,3 +102,7 @@ export function extractKeywords(text) {
     
     return keywordList.slice(0, NUM_DISPLAY_KEYWORDS).map(item => item.keyword)
 }
+
+export const convertUnixTimestampToDate = (timestamp) => {
+    return new Date(timestamp * 1000).toLocaleDateString('en-US')
+}

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import GlobalContext from '../../global/GlobalContext'
 import axios from 'axios'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import './stripe.css'
@@ -8,9 +9,12 @@ import '../../App.css'
 import { ContactBillingInfo } from './PaymentSteps/ContactBillingInfo'
 import { ReviewSubmit } from './PaymentSteps/ReviewSubmit'
 import { PaymentDetails } from './PaymentSteps/PaymentDetails'
+import { PopUpModal } from '../PopUpModal'
 
 export const PaymentForm = () => {
     const navigate = useNavigate()
+    const globalContext = useContext(GlobalContext)
+    const { popUpModalData, setPopUpModalData } = globalContext
     const [page, setPage] = useState(1)
     const [userInfo, setUserInfo] = useState({})
     const stripe = useStripe()
@@ -38,7 +42,7 @@ export const PaymentForm = () => {
             paymentMethodId: id
         }).then(res => {
             console.log('Subscription started: ', res.data)
-            navigate('/home')
+            setPopUpModalData({ open: true, header: 'You are subscribed!', message: `Thankyou for subscribing to Keyword Clutch!` })
         }).catch(e => {
             console.error('Error starting subscription:', e)
         }).finally(() => {
@@ -73,6 +77,7 @@ export const PaymentForm = () => {
                     <ReviewSubmit userInfo={userInfo} setPage={setPage} handleSubmit={handleSubmit} hideReviewSubmit={!hidePaymentDetails}/>
                 </div>
             )}
+            {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={null} closeFunc={() => navigate('/home')}/>}
         </div>
     )
 }

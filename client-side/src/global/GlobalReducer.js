@@ -20,6 +20,11 @@ const reducer = (state, action) => {
                 ...state,
                 stripeCustomer: action.payload
             }
+        case 'POP_UP_MODAL_DATA':
+            return {
+                ...state,
+                popUpModalData: action.payload
+            }
         default:
         return state
     }

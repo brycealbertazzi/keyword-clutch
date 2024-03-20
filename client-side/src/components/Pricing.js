@@ -1,22 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext from '../global/GlobalContext'
 import { useNavigate } from 'react-router-dom'
 import './Pricing.css'
 import '../App.css'
 import { useUser, SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
 import axios from 'axios'
-import { SubscriptionTypes } from '../Utils'
+import { SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
+import { PopUpModal } from './PopUpModal'
 
 export const Pricing = () => {
     const globalContext = useContext(GlobalContext)
-    const { stripeCustomer } = globalContext
+    const { stripeCustomer, popUpModalData, setPopUpModalData } = globalContext
     const navigate = useNavigate()
     const { user, isSignedIn } = useUser()
 
     const startFreeTrial = async () => {
         if (!isSignedIn || !user) return
         axios.post('/api/stripe/start-free-trial', { customerEmail: user.primaryEmailAddress.emailAddress }).then(() => {
+            setPopUpModalData({ open: true, header: 'Free Trial Started', message: `Your free trial has started, you will be billed when your trial ends on ${convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}` })
             console.log('Free trial started')
             navigate('/home')
         }).catch(error => {
@@ -24,10 +26,22 @@ export const Pricing = () => {
         })
     }
 
+    const handleStartFreeTrial = () => {
+        setPopUpModalData({ open: true, header: 'Start Free Trial', message: 'Are you sure you want to start your free trial?' })
+    }
+
     const subscribe = async () => {
         if (!isSignedIn || !user) return
         navigate('/payment')
     }
+
+    const handleSubscribe = () => {
+        setPopUpModalData({ open: true, header: 'Subscribe', message: 'Are you sure you want to subscribe?' })
+    }
+
+    useEffect(() => {
+        console.log(popUpModalData)
+    }, [popUpModalData])
 
     return (
         <div className='page-content'>
@@ -53,6 +67,7 @@ export const Pricing = () => {
                     </SignedIn>
                 </div>
             </div>
+            {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={startFreeTrial} closeFunc={null}/>}
         </div>
     )
 }
