@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import GlobalContext from '../../global/GlobalContext'
 import axios from 'axios'
@@ -10,6 +10,7 @@ import { ContactBillingInfo } from './PaymentSteps/ContactBillingInfo'
 import { ReviewSubmit } from './PaymentSteps/ReviewSubmit'
 import { PaymentDetails } from './PaymentSteps/PaymentDetails'
 import { PopUpModal } from '../PopUpModal'
+import { LoadingSpinner } from '../../LoadingSpinner'
 
 export const PaymentForm = () => {
     const navigate = useNavigate()
@@ -21,9 +22,10 @@ export const PaymentForm = () => {
     const elements = useElements()
     const [hidePaymentDetails, setHidePaymentDetails] = useState(true);
     const [loading, setLoading] = useState(false)
+    const submitFunc = useRef(null)
+    const closeFunc = useRef(null)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const subscribe = async (e) => {
         setLoading(true)
         const {error, paymentMethod} = await stripe.createPaymentMethod({
             type: 'card',
@@ -42,12 +44,24 @@ export const PaymentForm = () => {
             paymentMethodId: id
         }).then(res => {
             console.log('Subscription started: ', res.data)
-            setPopUpModalData({ open: true, header: 'You are subscribed!', message: `Thankyou for subscribing to Keyword Clutch!` })
+            postHandleSubscribe()
         }).catch(e => {
             console.error('Error starting subscription:', e)
         }).finally(() => {
             setLoading(false)
         })
+    }
+
+    const handleSubscribe = () => {
+        submitFunc.current = subscribe
+        closeFunc.current = null
+        setPopUpModalData({ open: true, header: 'Subscribe', message: 'Are you sure you want to subscribe?' })
+    }
+
+    const postHandleSubscribe = () => {
+        submitFunc.current = null
+        closeFunc.current = () => {navigate('/home')}
+        setPopUpModalData({ open: true, header: 'You are subscribed!', message: `Thankyou for subscribing to Keyword Clutch!` })
     }
 
     const handleChange = (e, type) => {
@@ -64,7 +78,7 @@ export const PaymentForm = () => {
 
     return (
         <div className='stripe-page-container'>
-            {loading && <div>Loading</div>}
+            {loading && <LoadingSpinner type={null}/>}
             {/* Page 1: Contact Info/Billing Address */}
             {page === 1 && (
                 <ContactBillingInfo handleChange={handleChange} setPage={setPage} />
@@ -72,12 +86,12 @@ export const PaymentForm = () => {
             {/* Page 2: Payment Information */} 
             {/* Page 3: Confirmation */}
             {(page === 2 || page === 3) && (
-                <div>
+                <div style={{display: loading ? 'none' : 'block'}}>
                     <PaymentDetails setPage={setPage} hidePaymentDetails={hidePaymentDetails}/>
-                    <ReviewSubmit userInfo={userInfo} setPage={setPage} handleSubmit={handleSubmit} hideReviewSubmit={!hidePaymentDetails}/>
+                    <ReviewSubmit userInfo={userInfo} setPage={setPage} handleSubmit={handleSubscribe} hideReviewSubmit={!hidePaymentDetails}/>
                 </div>
             )}
-            {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={null} closeFunc={() => navigate('/home')}/>}
+            {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={submitFunc?.current} closeFunc={closeFunc?.current}/>}
         </div>
     )
 }

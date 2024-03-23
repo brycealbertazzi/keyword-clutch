@@ -38,11 +38,13 @@ export const Navbar = () => {
     }
 
     useEffect(() => {  
+        console.log(user)
         fetchStripeCustomer()
     }, [user])
 
     useEffect(() => {
         console.log(stripeCustomer)
+        if (!(location.pathname === '/' || location.pathname === '/home') || !user) return
         if (!stripeCustomer?.customerSubscription?.status) {
             if (isSignedIn) navigate('/pricing')
             else navigate('/')
@@ -58,9 +60,11 @@ export const Navbar = () => {
     useEffect(() => {
         switch(location.pathname) {
             case '/':
+                fetchStripeCustomer()
                 setPageTitle(NavbarTitles.LANDING_PAGE)
                 break
             case '/home':
+                fetchStripeCustomer()
                 setPageTitle(NavbarTitles.HOME_PAGE)
                 break
             case '/account':
@@ -88,8 +92,8 @@ export const Navbar = () => {
                     <FontAwesomeIcon icon={faUser} onClick={() => {setShowDropdown(!showDropdown)}} size='2x'/>
                     {showDropdown && (
                         <div className='account-dropdown'>
-                            <button onClick={() => {setPageTitle(NavbarTitles.ACCOUNT_PAGE); navigate('/account')}}>Manage Account</button>
-                            <button onClick={() => signOut(() => navigate('/'))}>Sign Out</button>
+                            <button onClick={() => {setPageTitle(NavbarTitles.ACCOUNT_PAGE); navigate('/account'); setShowDropdown(false)}}>Manage Account</button>
+                            <button onClick={() => {signOut(() => navigate('/')); setShowDropdown(false)}}>Sign Out</button>
                         </div>
                     )}
                 </div>

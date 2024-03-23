@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import GlobalContext from '../global/GlobalContext'
 import { useUser } from '@clerk/clerk-react'
@@ -6,50 +6,74 @@ import axios from 'axios'
 import './UserAccount.css'
 import '../App.css'
 import { SubscriptionTypeLabels, SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
+import { PopUpModal } from '../components/PopUpModal'
 
 export const ManageAccount = () => {
     const globalContext = useContext(GlobalContext)
     const navigate = useNavigate()
-    const { stripeCustomer, setStripeCustomer } = globalContext
-    const { user } = useUser()
-
-    const fetchStripeCustomer = async () => {
-        if (!user?.primaryEmailAddress?.emailAddress) return
-        await axios.get('/api/stripe/get-customer-data', { customerEmail: user.primaryEmailAddress.emailAddress }).then(res => {
-            console.log(res?.data)
-            setStripeCustomer(res?.data)
-        })
-    }
+    const { stripeCustomer, setStripeCustomer, popUpModalData, setPopUpModalData } = globalContext
+    const submitFunc = useRef(null)
+    const closeFunc = useRef(null)
+    const [loading, setLoading] = useState(false)
 
     const cancelSubscription = async () => {
+        setLoading(true)
         axios.post('/api/stripe/cancel-subscription', { subscriptionId: stripeCustomer.customerSubscription.id }).then(() => {
             console.log('Subscription cancelled')
-            fetchStripeCustomer()
+            setLoading(false)
+            postHandleCancelSubscription()
         }).catch(error => {
             console.error('Error cancelling subscription:', error)
         })
     }
 
+    const handleCancelSubscription = () => {
+        submitFunc.current = cancelSubscription
+        closeFunc.current = null
+        setPopUpModalData({ open: true, header: 'Cancel Subscription', message: `Are you sure you want to cancel your subscription? You will lose access on ${convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}`})
+    }
+
+    const postHandleCancelSubscription = () => {
+        submitFunc.current = null
+        closeFunc.current = () => {navigate('/')}
+        setPopUpModalData({ open: true, header: 'Subscription Cancelled', message: `Your subscription has been cancelled, you will not be billed at the end of your current billing cycle. However, you will lose access on ${convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}. If you change your mind,
+        you may renew your subscription at any time.`})
+    }
+
     const renewSubscription = async () => {
+        setLoading(true)
         axios.post('/api/stripe/renew-subscription', { subscriptionId: stripeCustomer.customerSubscription.id }).then(() => {
             console.log('Subscription renewed')
-            fetchStripeCustomer()
+            setLoading(false)
+            postHandleRenewSubscription()
         }).catch(error => {
             console.error('Error renewing subscription:', error)
         })
+    }
+
+    const handleRenewSubscription = () => {
+        submitFunc.current = renewSubscription
+        closeFunc.current = null
+        setPopUpModalData({ open: true, header: 'Renew Subscription', message: `Are you sure you want to renew your subscription? You will be billed on ${convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}`})
+    }
+
+    const postHandleRenewSubscription = () => {
+        submitFunc.current = null
+        closeFunc.current = () => {navigate('/')}
+        setPopUpModalData({ open: true, header: 'Subscription Renewed', message: `Your subscription has been renewed, you will be billed on ${convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}`})
     }
 
     const renderCancelOrRenewButton = () => {
         switch(stripeCustomer?.customerSubscription?.status) {
             case SubscriptionTypes.ACTIVE:
                 if (stripeCustomer?.customerSubscription?.cancel_at_period_end) {
-                    return <button className='app-button' onClick={renewSubscription}>Reactivate Subscription</button>
+                    return <button className='app-button' onClick={handleRenewSubscription}>Reactivate Subscription</button>
                 }
-                return <button className='app-button' onClick={cancelSubscription}>Cancel Subscription</button>
+                return <button className='app-button' onClick={handleCancelSubscription}>Cancel Subscription</button>
             case SubscriptionTypes.TRIALING:
                 return <button className='app-button' onClick={() => navigate('/pricing')}>Subscribe</button>
             default:
-                return <button className='app-button' onClick={renewSubscription}>Renew Subscription</button>
+                return <button className='app-button' onClick={handleRenewSubscription}>Renew Subscription</button>
         }
     }
 
@@ -66,7 +90,7 @@ export const ManageAccount = () => {
 
     }
 
-    if (!stripeCustomer) return (
+    if (!stripeCustomer || loading) return (
         <div className='page-content'>
             <h1>Loading...</h1>
         </div>
@@ -103,6 +127,7 @@ export const ManageAccount = () => {
                 </div>
                 {renderCancelOrRenewButton()}
             </div>
+            {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={submitFunc?.current} closeFunc={closeFunc?.current}/>}
         </div>
     )
 }
