@@ -35,6 +35,16 @@ export const Error = ({resultType, input}) => {
           </div>
         </div>
       )}
+      {resultType === ResultType.TEXT && (
+        <div className='error-container' style={{borderColor: '#2f9fad'}}>
+          <h2 className='error-title'>Unable to optimize text</h2>
+          <div className='error-info'>
+            <p className='error-msg-item'>- Make sure to enter valid text so it can be optimized</p>
+            <p className='error-msg-item'>- Make sure you have chosen at least one keyword to optimize for</p>
+            <p className='error-msg-item'>- The server might be taking too long to respond, refresh the page and try again</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

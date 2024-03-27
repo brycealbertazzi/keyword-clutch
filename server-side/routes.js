@@ -109,10 +109,35 @@ routes.get('/weburl', async (req, res) => {
     res.status(200).send(textContent)
 })
 
+async function chatGPTAPIText(text, keywords) {
+    // API endpoint for GPT-3.5-turbo-0125
+    const prompt = `Optimize the following text for SEO, try to make the response as complete as possible. Keep the length of the response as close to the length of the text as possible without exceeding 700 words. "Text: ${text}". Keywords: ${keywords}}.`
+
+    /* gpt-3.5-turbo-0613 */
+    // Make the HTTP POST request to the OpenAI API
+    const completion = await openAIClient.chat.completions.create({
+        messages: [
+            { role: "user", content: prompt },
+        ],
+        model: "gpt-3.5-turbo-0613",
+        max_tokens: 700,
+        temperature: 0.5,
+    })
+    // Parse and return response
+    return completion
+}
+
+routes.get('/text', async (req, res) => {
+    const { text, keywords } = req.query
+    // Use the OpenAI GPT-3 API to optimize the text for SEO
+    const response = await chatGPTAPIText(text, keywords)
+    res.send(response.choices[0].message.content).status(200)
+})
+
 const OPEN_AI_KEY =  process.env.KEYWORD_CLUTCH_OPEN_API_KEY
 const openAIClient = new OpenAI({baseURL: 'https://api.openai.com/v1', apiKey: OPEN_AI_KEY, organization: null})
 
-async function callGPTAPI(websiteText, optimizedKeywords) {
+async function chatGPTAPIWebUrl(websiteText, optimizedKeywords) {
     // API endpoint for GPT-3.5-turbo-0125
     const prompt = `Optimize the following website text for SEO, limit the response to 700 words, but try to make the response as complete as possible. Use the delimiter "*del*" to separate sections of the website in the returned string. 
     Try to have the sections start wherever there is a colon. Try to have about one section per 100 words. "Website text: ${websiteText}". Keywords: ${optimizedKeywords}}.`
@@ -133,7 +158,7 @@ async function callGPTAPI(websiteText, optimizedKeywords) {
 
 routes.post('/openai-gpt3', async (req, res) => {
     const { websiteText, optimizedKeywords } = req.body
-    const response = await callGPTAPI(websiteText, optimizedKeywords)
+    const response = await chatGPTAPIWebUrl(websiteText, optimizedKeywords)
     console.log(JSON.stringify(response))
     res.send(response.choices[0].message.content).status(200)
 })

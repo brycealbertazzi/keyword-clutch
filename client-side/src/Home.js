@@ -6,10 +6,11 @@ import { KeywordSuggestAPIData } from './components/KeywordSearch/KeywordSuggest
 import { YoutubeKeywordAPIData } from './components/KeywordSearch/YoutubeKeywordAPIData'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { faMagnifyingGlass, faGlobe } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faGlobe, faFileLines } from '@fortawesome/free-solid-svg-icons'
 import { InputType, ResultType, ResultTypeColors, extractKeywords } from './Utils'
 import { KeywordScrape } from './components/WebsiteScan/KeywordScrape'
 import GlobalContext from './global/GlobalContext'
+import { TextOptimize } from './components/TextOptimize/TextOptimize'
 
 export const Home = () => {
   const globalContext = useContext(GlobalContext)
@@ -154,7 +155,7 @@ export const Home = () => {
         <div>
           <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.WEB_URL ? ResultTypeColors[ResultType.WEB_URL]  : '#555'}} onClick={() => handleChangeResultType(ResultType.WEB_URL)}>
             Website&nbsp;
-            <FontAwesomeIcon icon={faGlobe} />
+            <FontAwesomeIcon icon={faGlobe}/>
           </button>
         </div>
         <div>
@@ -169,14 +170,22 @@ export const Home = () => {
             <FontAwesomeIcon icon={faYoutube} />
           </button>
         </div>
+        <div>
+          <button className="app-button" style={{backgroundColor: selectedResultType === ResultType.TEXT ? ResultTypeColors[ResultType.TEXT]  : '#555'}} onClick={() => handleChangeResultType(ResultType.TEXT)}>
+            Text&nbsp;
+            <FontAwesomeIcon icon={faFileLines} />
+          </button>
+        </div>
       </div>
-      {/* Search Bar */}
-      <div className="search-container">
-        <input type="text" className="search-input" placeholder={selectedResultType === ResultType.WEB_URL ? 'Enter a URL...' : 'Enter a keyword...'} value={selectedResultType === ResultType.WEB_URL ? userInput[InputType.URL] : userInput[InputType.KEYWORD]} onChange={(e) => handleInputChange(e)} onKeyDown={handleKeyPress}/>
-        <button className="search-button" onClick={handleSubmit}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} color='white' size='xl'/>
-        </button>
-      </div>
+      {selectedResultType !== ResultType.TEXT &&
+        // Search Bar
+        <div className="search-container">
+          <input type="text" className="search-input" placeholder={selectedResultType === ResultType.WEB_URL ? 'Enter a URL...' : 'Enter a keyword...'} value={selectedResultType === ResultType.WEB_URL ? userInput[InputType.URL] : userInput[InputType.KEYWORD]} onChange={(e) => handleInputChange(e)} onKeyDown={handleKeyPress}/>
+          <button className="search-button" onClick={handleSubmit}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} color='white' size='xl'/>
+          </button>
+        </div>
+      }
       {/* Data Grids */}
       {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={googleSearchResults ? googleSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.GOOGLE]} setLoadingTables={setLoadingTables} apiError={googleApiError}/>}
       {selectedResultType === ResultType.YOUTUBE && <YoutubeKeywordAPIData apiData={youtubeSearchResults ? youtubeSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.YOUTUBE]} setLoadingTables={setLoadingTables} apiError={youtubeApiError}/>}
@@ -192,6 +201,7 @@ export const Home = () => {
           setOptimizedKeywords={setOptimizedKeywords}
         />
       }
+      {selectedResultType === ResultType.TEXT && <TextOptimize />}
     </div>
   )
 }

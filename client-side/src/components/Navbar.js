@@ -46,14 +46,26 @@ export const Navbar = () => {
         console.log(stripeCustomer)
         if (!(location.pathname === '/' || location.pathname === '/home') || !user) return
         if (!stripeCustomer?.customerSubscription?.status) {
-            if (isSignedIn) navigate('/pricing')
-            else navigate('/')
+            if (isSignedIn) {
+                if (location.pathname !== '/pricing') {
+                    navigate('/pricing')
+                }
+            }
+            else {
+                if (location.pathname !== '/') {
+                    navigate('/')
+                }
+            }
             return
         }
         if (stripeCustomer?.customerSubscription?.status === SubscriptionTypes.ACTIVE || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) {
-            navigate('/home')
+            if (location.pathname !== '/home') {
+                navigate('/home')
+            }
         } else {
-            navigate('/')
+            if (location.pathname !== '/') {
+                navigate('/')
+            }
         }
     }, [stripeCustomer])
 

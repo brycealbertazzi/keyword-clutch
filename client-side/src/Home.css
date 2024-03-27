@@ -1,6 +1,6 @@
 
-/* Styles for the search bar container */
-.search-container {
+  /* Styles for the search bar container */
+  .search-container {
     position: relative;
     display: flex;
     align-items: center;
@@ -38,10 +38,106 @@
   .search-button:hover {
     background-color: #555;
   }
+
+  .text-optimize-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  /* Styles for the text input container */
+  .text-input-container {
+    position: relative;
+    max-width: 800px; /* Increased max-width for better readability */
+    width: 100%;
+  }
+
+  /* Styles for the text input */
+  .text-input {
+    width: 100%;
+    height: 600px; /* Adjust height for multiple paragraphs */
+    padding: 10px 15px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Reduced border-radius for a cleaner look */
+    background-color: white; /* Light background color */
+    color: #222; /* Text color */
+    font-size: 16px;
+    outline: none;
+    resize: vertical; /* Allow vertical resizing */
+  }
+
+  /* Styles for the keyword container */
+  .keyword-container {
+    width: 100%;
+    margin: 2rem auto;
+    max-width: 600px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Styles for the keyword input */
+  #keyword-input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  #keyword-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Styles for the keyword boxes */
+  .keyword-box {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  /* Styles for the remove button inside the keyword box */
+  .keyword-box .remove-btn {
+    cursor: pointer;
+    margin-left: 5px;
+    background-color: #444;
+    background-color: none;
+    color: white;
+  }
+
+  /* Optional: Styles for a submit button */
+  .submit-button {
+    margin-top: 10px; /* Space between input and button */
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #007bff; /* Blue color for button */
+    color: #fff; /* Text color */
+  }
+
+  .submit-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
   
   /* Result Type Select Tabbar */
   .result-type-select {
-    width: 450px;
+    width: 600px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -91,6 +187,3 @@
 .page-arrows button:disabled {
   cursor: not-allowed;
 }
-
-
-  

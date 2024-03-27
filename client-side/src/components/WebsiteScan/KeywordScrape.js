@@ -79,7 +79,7 @@
               <div></div>
               <div>
                 {websiteSEOStep === 1 && <h2 style={{textAlign: 'center'}}>Select keywords for SEO optimization</h2>}
-                {websiteSEOStep === 2 && <h2 style={{textAlign: 'center'}}>SEO Optimized text for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>}
+                {websiteSEOStep === 2 && <h2 style={{textAlign: 'center'}}>SEO optimized text for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>}
               </div>
               <div>
                 <button className={websiteSEOStep >= 2 ? 'hidden-button' : 'app-button'} onClick={() => {

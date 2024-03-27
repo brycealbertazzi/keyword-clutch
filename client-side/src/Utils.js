@@ -8,7 +8,8 @@ export const NavbarTitles = {
 export const ResultType = {
     GOOGLE: 'google',
     YOUTUBE: 'youtube',
-    WEB_URL: 'web_url'
+    WEB_URL: 'web_url',
+    TEXT: 'text'
 }
 
 export const InputType = {
@@ -19,7 +20,8 @@ export const InputType = {
 export const ResultTypeColors = {
     [ResultType.GOOGLE]: '#4285F4',
     [ResultType.YOUTUBE]: '#f44242',
-    [ResultType.WEB_URL]: '#ad9f2f'
+    [ResultType.WEB_URL]: '#ad9f2f',
+    [ResultType.TEXT]: '#59b384',
 }
 
 export const SubscriptionTypes = {

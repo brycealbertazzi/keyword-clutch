@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import GlobalContext from '../global/GlobalContext'
-import { useUser } from '@clerk/clerk-react'
 import axios from 'axios'
 import './UserAccount.css'
 import '../App.css'
@@ -11,7 +10,7 @@ import { PopUpModal } from '../components/PopUpModal'
 export const ManageAccount = () => {
     const globalContext = useContext(GlobalContext)
     const navigate = useNavigate()
-    const { stripeCustomer, setStripeCustomer, popUpModalData, setPopUpModalData } = globalContext
+    const { stripeCustomer, popUpModalData, setPopUpModalData } = globalContext
     const submitFunc = useRef(null)
     const closeFunc = useRef(null)
     const [loading, setLoading] = useState(false)

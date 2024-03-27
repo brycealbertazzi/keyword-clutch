@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import GlobalContext from '../global/GlobalContext'
 import { useNavigate } from 'react-router-dom'
 import './Pricing.css'
@@ -8,26 +8,40 @@ import { useUser, SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
 import axios from 'axios'
 import { SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
 import { PopUpModal } from './PopUpModal'
+import { LoadingSpinner } from '../LoadingSpinner'
 
 export const Pricing = () => {
     const globalContext = useContext(GlobalContext)
     const { stripeCustomer, popUpModalData, setPopUpModalData } = globalContext
     const navigate = useNavigate()
     const { user, isSignedIn } = useUser()
+    const submitFunc = useRef(null)
+    const closeFunc = useRef(null)
+    const [loading, setLoading] = useState(false)
 
     const startFreeTrial = async () => {
         if (!isSignedIn || !user) return
+        setLoading(true)
         axios.post('/api/stripe/start-free-trial', { customerEmail: user.primaryEmailAddress.emailAddress }).then(() => {
-            setPopUpModalData({ open: true, header: 'Free Trial Started', message: `Your free trial has started, you will be billed when your trial ends on ${convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}` })
             console.log('Free trial started')
-            navigate('/home')
+            postHandleFreeTrial()
         }).catch(error => {
             console.error('Error starting free trial:', error)
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
     const handleStartFreeTrial = () => {
-        setPopUpModalData({ open: true, header: 'Start Free Trial', message: 'Are you sure you want to start your free trial?' })
+        submitFunc.current = startFreeTrial
+        closeFunc.current = null
+        setPopUpModalData({ open: true, header: 'Free Trial', message: 'You are about to start a free trial, your trial will end in 3 days' })
+    }
+
+    const postHandleFreeTrial = () => {
+        submitFunc.current = null
+        closeFunc.current = () => { navigate('/home') }
+        setPopUpModalData({ open: true, header: 'Free Trial Started', message: 'Your free trial has started!' })
     }
 
     const subscribe = async () => {
@@ -35,13 +49,15 @@ export const Pricing = () => {
         navigate('/payment')
     }
 
-    const handleSubscribe = () => {
-        setPopUpModalData({ open: true, header: 'Subscribe', message: 'Are you sure you want to subscribe?' })
-    }
-
     useEffect(() => {
         console.log(popUpModalData)
     }, [popUpModalData])
+
+    if (loading) return (
+        <div className='page-content'>
+            <h1>Loading...</h1>
+        </div>
+    )
 
     return (
         <div className='page-content'>
@@ -62,12 +78,12 @@ export const Pricing = () => {
                         </SignInButton>
                     </SignedOut>
                     <SignedIn>
-                        {!stripeCustomer?.customerData && <button className='app-button' onClick={startFreeTrial}>Free Trial</button>}
+                        {!stripeCustomer?.customerData && <button className='app-button' onClick={handleStartFreeTrial}>Free Trial</button>}
                         {(!stripeCustomer?.customerData || !stripeCustomer?.customerSubscription || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) && <button className='app-button' onClick={subscribe}>Subscribe</button>}
                     </SignedIn>
                 </div>
             </div>
-            {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={startFreeTrial} closeFunc={null}/>}
+            {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={submitFunc.current} closeFunc={closeFunc.current}/>}
         </div>
     )
 }
