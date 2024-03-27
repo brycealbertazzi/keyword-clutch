@@ -53,6 +53,7 @@ export const TextOptimize = () => {
             setTextForOptimization(response?.data ? response.data : '')
         }).catch((error) => {
             console.error('Error:', error)
+            setApiError(true)
         }).finally(() => setLoading(false))
     }
 
