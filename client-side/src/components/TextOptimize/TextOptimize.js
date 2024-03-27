@@ -57,7 +57,11 @@ export const TextOptimize = () => {
     }
 
     if (apiError) {
-        return <Error resultType={ResultType.WEB_URL} input={null}/>
+        return (
+            <div style={{marginTop: '50px'}}>
+                <Error resultType={ResultType.TEXT} input={null}/>
+            </div>
+        )
     }
 
     if (loading) {
