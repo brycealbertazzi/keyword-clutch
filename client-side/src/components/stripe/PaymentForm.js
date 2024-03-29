@@ -20,13 +20,15 @@ export const PaymentForm = () => {
     const [userInfo, setUserInfo] = useState({})
     const stripe = useStripe()
     const elements = useElements()
-    const [hidePaymentDetails, setHidePaymentDetails] = useState(true);
+    const [hidePaymentDetails, setHidePaymentDetails] = useState(true)
+    const [hideReviewSubmit, setHideReviewSubmit] = useState(true)
     const [loading, setLoading] = useState(false)
     const submitFunc = useRef(null)
     const closeFunc = useRef(null)
 
     const subscribe = async (e) => {
         setLoading(true)
+        setHideReviewSubmit(true)
         const {error, paymentMethod} = await stripe.createPaymentMethod({
             type: 'card',
             card: elements.getElement(CardElement)
@@ -69,28 +71,44 @@ export const PaymentForm = () => {
     }
 
     useEffect(() => {
-        if (page === 2) {
-            setHidePaymentDetails(false)
-        } else {
-            setHidePaymentDetails(true)
+        switch (page) {
+            case 1:
+                setHidePaymentDetails(true)
+                setHideReviewSubmit(true)
+                break
+            case 2:
+                setHidePaymentDetails(false)
+                setHideReviewSubmit(true)
+                break
+            case 3:
+                setHidePaymentDetails(true)
+                setHideReviewSubmit(false)
+                break
+            default:
+                break
         }
     }, [page])
 
+    {/* Page 1: Contact Info/Billing Address */}
+    if (page === 1) {
+        return (
+            <div className='stripe-page-container'>
+                <ContactBillingInfo handleChange={handleChange} setPage={setPage} />
+            </div>
+        )
+    }
+
+    {/* Page 2: Payment Information */} 
+    {/* Page 3: Confirmation */}
     return (
         <div className='stripe-page-container'>
-            {loading && <LoadingSpinner type={null}/>}
-            {/* Page 1: Contact Info/Billing Address */}
-            {page === 1 && (
-                <ContactBillingInfo handleChange={handleChange} setPage={setPage} />
-            )}
-            {/* Page 2: Payment Information */} 
-            {/* Page 3: Confirmation */}
-            {(page === 2 || page === 3) && (
-                <div style={{display: loading ? 'none' : 'block'}}>
-                    <PaymentDetails setPage={setPage} hidePaymentDetails={hidePaymentDetails}/>
-                    <ReviewSubmit userInfo={userInfo} setPage={setPage} handleSubmit={handleSubscribe} hideReviewSubmit={!hidePaymentDetails}/>
-                </div>
-            )}
+            {loading && 
+                <div style={{marginBottom: '30px'}}>
+                    <LoadingSpinner type={null}/>
+                </div> 
+            }
+            <PaymentDetails setPage={setPage} hidePaymentDetails={hidePaymentDetails}/>
+            <ReviewSubmit userInfo={userInfo} setPage={setPage} handleSubmit={handleSubscribe} hideReviewSubmit={hideReviewSubmit}/>
             {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={submitFunc?.current} closeFunc={closeFunc?.current}/>}
         </div>
     )

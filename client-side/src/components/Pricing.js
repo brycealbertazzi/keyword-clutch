@@ -58,12 +58,13 @@ export const Pricing = () => {
     return (
         <div className='page-content'>
             <div className='pricing-card '>
-                <p>Get access to all of our features</p>
-                <p>Unlimited Google keyword searches</p>
-                <p>Unlimited Youtube keyword searches</p>
-                <p>Unlimited website URL keyword scrapes</p>
-                <p>Unlimited SEO text optimizations</p>
-                <h3>Just $10.00/month</h3>
+                <h1 style={{textAlign: 'center'}}>Subscription - $10.00/mo</h1>
+                <h3>- 3 day free trial - no card required</h3>
+                <h3>- Get access to all of our features</h3>
+                <h3>- Unlimited Google keyword searches</h3>
+                <h3>- Unlimited Youtube keyword searches</h3>
+                <h3>- Unlimited website scans</h3>
+                <h3>- Unlimited SEO text optimizations</h3>
                 <div className='pricing-pg-buttons'>
                     <SignedOut>
                         <SignInButton className='app-button' redirectUrl='/pricing'>

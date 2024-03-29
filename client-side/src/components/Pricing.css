@@ -1,13 +1,22 @@
 .pricing-card {
-    width: 300px;
+    width: 500px;
     padding: 20px;
     margin: 20px;
     border-radius: 10px;
+    border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #333;
-    text-align: center;
+    color: #fff; /* Text color */
+    transition: all 0.3s ease; /* Smooth transition */
 }
 
+/* Add hover effect to the card */
+.pricing-card:hover {
+    transform: translateY(-5px); /* Move the card slightly up on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Enhance box shadow */
+}
+
+/* Style the pricing page buttons */
 .pricing-pg-buttons {
     display: flex;
     flex-direction: row;

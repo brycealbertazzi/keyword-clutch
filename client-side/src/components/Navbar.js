@@ -38,26 +38,12 @@ export const Navbar = () => {
     }
 
     useEffect(() => {  
-        console.log(user)
         fetchStripeCustomer()
     }, [user])
 
     useEffect(() => {
-        console.log(stripeCustomer)
-        if (!(location.pathname === '/' || location.pathname === '/home') || !user) return
-        if (!stripeCustomer?.customerSubscription?.status) {
-            if (isSignedIn) {
-                if (location.pathname !== '/pricing') {
-                    navigate('/pricing')
-                }
-            }
-            else {
-                if (location.pathname !== '/') {
-                    navigate('/')
-                }
-            }
-            return
-        }
+        console.log(stripeCustomer, location.pathname, user)
+        if (!user) return
         if (stripeCustomer?.customerSubscription?.status === SubscriptionTypes.ACTIVE || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) {
             if (location.pathname !== '/home') {
                 navigate('/home')

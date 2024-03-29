@@ -12,7 +12,7 @@ export const LandingPage = () => {
 
   return (
     <div className='page-content'>
-        <div className='landing-pg-left'>
+        <div className='landing-pg-text-content'>
           <div className='bulletpoint-container'>
             <h1 style={{fontSize: '45px'}}>The most handy SEO keyword reasearch tool</h1>
             <h2 style={{fontSize: '30px'}} className='bulletpoint'>- Up your SEO game</h2>
@@ -22,7 +22,7 @@ export const LandingPage = () => {
             <button className='app-button' onClick={() => navigate('/pricing')}>See Pricing</button>
           </div>
         </div>
-        <div className='landing-pg-right'>
+        <div className='landing-pg-logos'>
             <div className='logos-top'>
               <div className='logo'>
                 <FontAwesomeIcon icon={faGoogle} size='10x' color={ResultTypeColors[ResultType.GOOGLE]}/>
