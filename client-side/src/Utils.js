@@ -26,12 +26,14 @@ export const ResultTypeColors = {
 
 export const SubscriptionTypes = {
     TRIALING: 'trialing',
-    ACTIVE: 'active'
+    ACTIVE: 'active',
+    PAST_DUE: 'past_due',
 }
 
 export const SubscriptionTypeLabels = {
     [SubscriptionTypes.TRIALING]: 'Free Trial',
     [SubscriptionTypes.ACTIVE]: 'Active Subscription',
+    [SubscriptionTypes.PAST_DUE]: 'Past Due',
 }
 
 const StopWords = {

@@ -72,7 +72,11 @@ export const ManageAccount = () => {
             case SubscriptionTypes.TRIALING:
                 return <button className='app-button' onClick={() => navigate('/pricing')}>Subscribe</button>
             default:
-                return <button className='app-button' onClick={handleRenewSubscription}>Renew Subscription</button>
+                if (stripeCustomer?.paymentMethod) {
+                    return <button className='app-button' onClick={handleRenewSubscription}>{stripeCustomer?.paymentMethod ? 'Renew Subscription' : 'Subscribe'}</button>
+                } else {
+                    return <button className='app-button' onClick={() => navigate('/pricing')}>Subscribe</button>
+                }
         }
     }
 
@@ -84,9 +88,25 @@ export const ManageAccount = () => {
             case SubscriptionTypes.TRIALING:
                 return 'Trial Ends'
             default:
-                return 'Expired On'
+                return 'Ended On'
         }
+    }
 
+    const determineSubscriptionStatus = () => {
+        switch(stripeCustomer?.customerSubscription?.status) {
+            case SubscriptionTypes.ACTIVE:
+                return SubscriptionTypeLabels[SubscriptionTypes.ACTIVE]
+            case SubscriptionTypes.TRIALING:
+                return SubscriptionTypeLabels[SubscriptionTypes.TRIALING]
+            case SubscriptionTypes.PAST_DUE:
+                if (stripeCustomer?.paymentMethod) {
+                    return 'Expired Subscription'
+                } else {
+                    return 'Expired Free Trial'
+                }
+            default:
+                return 'Inactive'
+        }
     }
 
     if (!stripeCustomer || loading) return (
@@ -109,11 +129,11 @@ export const ManageAccount = () => {
                     </div>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>Subscription Status</h3>
-                        <p className='account-field-value'>{SubscriptionTypeLabels[stripeCustomer?.customerSubscription?.status] ? SubscriptionTypeLabels[stripeCustomer?.customerSubscription?.status] : "Expired/Inactive Subscription"}</p>
+                        <p className='account-field-value'>{determineSubscriptionStatus()}</p>
                     </div>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>{renderNextBillingCycleLabel()}</h3>
-                        <p>{convertUnixTimestampToDate(stripeCustomer?.customerSubscription?.current_period_end)}</p>
+                        <p>{convertUnixTimestampToDate(stripeCustomer?.paymentMethod ? stripeCustomer?.customerSubscription?.current_period_end : stripeCustomer?.customerSubscription?.trial_end)}</p>
                     </div>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>Payment Method</h3>

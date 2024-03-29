@@ -160,7 +160,7 @@ routes.post('/start-free-trial', async (req, res) => {
       customer: customer.id,
       items: [{ price: process.env.TEST_KEYWORD_CLUTCH_STRIPE_PRICE_ID }],
       trial_period_days: 3, // # of days for the trial period
-      cancel_at_period_end: false, // Set the subscripion to renew after the trial period
+      cancel_at_period_end: true,
     })
 
     res.status(200).json({ subscription })

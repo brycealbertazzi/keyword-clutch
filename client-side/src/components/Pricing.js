@@ -49,10 +49,6 @@ export const Pricing = () => {
         navigate('/payment')
     }
 
-    useEffect(() => {
-        console.log(popUpModalData)
-    }, [popUpModalData])
-
     if (loading) return (
         <div className='page-content'>
             <h1>Loading...</h1>
@@ -79,7 +75,7 @@ export const Pricing = () => {
                     </SignedOut>
                     <SignedIn>
                         {!stripeCustomer?.customerData && <button className='app-button' onClick={handleStartFreeTrial}>Free Trial</button>}
-                        {(!stripeCustomer?.customerData || !stripeCustomer?.customerSubscription || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) && <button className='app-button' onClick={subscribe}>Subscribe</button>}
+                        {(!stripeCustomer?.customerData || !stripeCustomer?.customerSubscription || !stripeCustomer?.paymentMethod || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) && <button className='app-button' onClick={subscribe}>Subscribe</button>}
                     </SignedIn>
                 </div>
             </div>
