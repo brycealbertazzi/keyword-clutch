@@ -42,7 +42,6 @@ export const Navbar = () => {
     }, [user])
 
     useEffect(() => {
-        console.log(stripeCustomer, location.pathname, user)
         if (!user) return
         if (stripeCustomer?.customerSubscription?.status === SubscriptionTypes.ACTIVE || stripeCustomer?.customerSubscription?.status === SubscriptionTypes.TRIALING) {
             if (location.pathname !== '/home') {

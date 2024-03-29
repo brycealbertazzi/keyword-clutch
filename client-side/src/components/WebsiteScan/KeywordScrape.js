@@ -11,7 +11,7 @@
 
   export const KeywordScrape = ({apiData, url, loading, setLoadingTables, apiError, websiteText, optimizedKeywords, setOptimizedKeywords}) => {
     const globalContext = useContext(GlobalContext)
-    const { websiteSEOStep, setWebsiteSEOStep, optimizedText, setOptimizedText } = globalContext
+    const { websiteSEOStep, setWebsiteSEOStep, webUrlOptimizedText, setWebUrlOptimizedText } = globalContext
 
     const [keywordGroups, setKeywordGroups] = useState([])
     const [optimizedTextSections, setOptimizedTextSections] = useState([])
@@ -25,9 +25,9 @@
         optimizedKeywords,
       })
       .then((res) => {
-        let optimizedText = res.data
-        optimizedText.replace(/\n/g, '')
-        setOptimizedText(optimizedText)
+        let tmpOptimizedText = res.data
+        tmpOptimizedText.replace(/\n/g, '')
+        setWebUrlOptimizedText(tmpOptimizedText)
       })
       .catch((error) => {
         console.error('Error:', error)
@@ -45,10 +45,10 @@
     }
 
     useEffect(() => {
-      let optimizedTextSections = optimizedText.split('*del*')
+      let optimizedTextSections = webUrlOptimizedText.split('*del*')
       optimizedTextSections = optimizedTextSections.filter((section) => section.length > 0 && !section.includes('Keywords:'))
       setOptimizedTextSections(optimizedTextSections)
-    }, [optimizedText])
+    }, [webUrlOptimizedText])
 
     useEffect(() => {
       if (!apiData) return

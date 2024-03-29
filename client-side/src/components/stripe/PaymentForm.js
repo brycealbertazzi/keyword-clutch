@@ -89,7 +89,6 @@ export const PaymentForm = () => {
         }
     }, [page])
 
-    {/* Page 1: Contact Info/Billing Address */}
     if (page === 1) {
         return (
             <div className='stripe-page-container'>
@@ -98,8 +97,6 @@ export const PaymentForm = () => {
         )
     }
 
-    {/* Page 2: Payment Information */} 
-    {/* Page 3: Confirmation */}
     return (
         <div className='stripe-page-container'>
             {loading && 

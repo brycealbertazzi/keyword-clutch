@@ -24,7 +24,8 @@ export const Home = () => {
     [ResultType.YOUTUBE]: false,
     [ResultType.WEB_URL]: false
   })
-  const [keyword, setKeyword] = useState('')
+  const [googleKeyword, setGoogleKeyword] = useState('')
+  const [youtubeKeyword, setYoutubeKeyword] = useState('')
   const [url, setUrl] = useState('')
 
   const [googleSearchResults, setGoogleSearchResults] = useState(null)
@@ -39,15 +40,14 @@ export const Home = () => {
 
   const [websiteText, setWebsiteText] = useState('')
   const [optimizedKeywords, setOptimizedKeywords] = useState([])
+  const [pageOptimizeOptimizedText, setPageOptimizeOptimizedText] = useState('')
 
-  const submitKeyword = () => {
+  const submitGoogleKeyword = () => {
     const currentKeyword = userInput[InputType.KEYWORD]
     if (currentKeyword.length <= 0) return
-    setKeyword(currentKeyword)
-    // Retrieve keyword data from the KeySuggest Keyword Data API
-    setLoadingTables({...loadingTables, [ResultType.GOOGLE]: true, [ResultType.YOUTUBE]: true})
+    setGoogleKeyword(currentKeyword)
+    setLoadingTables({...loadingTables, [ResultType.GOOGLE]: true})
     setGoogleApiError(false)
-    setYoutubeApiError(false)
     axios.get(`/api/data/keyword?keyword=${currentKeyword}`)
       .then((response) => {
         const googleKeywordData = response?.data?.data?.related_kw
@@ -62,8 +62,14 @@ export const Home = () => {
         setGoogleApiError(true)
         setLoadingTables({...loadingTables, [ResultType.GOOGLE]: false})
       })
-    
-    // Retrieve keyword data from the Keyword Research for YouTube API
+  }
+
+  const submitYoutubeKeyword = () => {
+    const currentKeyword = userInput[InputType.KEYWORD]
+    if (currentKeyword.length <= 0) return
+    setYoutubeKeyword(currentKeyword)
+    setLoadingTables({...loadingTables, [ResultType.YOUTUBE]: true})
+    setYoutubeApiError(false)
     axios.get(`/api/data/youtube-keyword?keyword=${currentKeyword}`)
       .then((response) => {
         let youtubeKeywordData = []
@@ -117,8 +123,19 @@ export const Home = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      if (selectedResultType === ResultType.WEB_URL) submitWebUrl()
-      else submitKeyword()
+      switch (selectedResultType) {
+        case ResultType.GOOGLE:
+          submitGoogleKeyword()
+          break
+        case ResultType.YOUTUBE:
+          submitYoutubeKeyword()
+          break
+        case ResultType.WEB_URL:
+          submitWebUrl()
+          break
+        default:
+          break
+      }
     }
   }
 
@@ -130,8 +147,19 @@ export const Home = () => {
   }
 
   const handleSubmit = () => {
-    if (selectedResultType === ResultType.WEB_URL) submitWebUrl()
-    else submitKeyword()
+    switch (selectedResultType) {
+      case ResultType.GOOGLE:
+        submitGoogleKeyword()
+        break
+      case ResultType.YOUTUBE:
+        submitYoutubeKeyword()
+        break
+      case ResultType.WEB_URL:
+        submitWebUrl()
+        break
+      default:
+        break
+    }
   }
 
   const handleChangeResultType = (resultType) => {
@@ -187,8 +215,8 @@ export const Home = () => {
         </div>
       }
       {/* Data Grids */}
-      {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={googleSearchResults ? googleSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.GOOGLE]} setLoadingTables={setLoadingTables} apiError={googleApiError}/>}
-      {selectedResultType === ResultType.YOUTUBE && <YoutubeKeywordAPIData apiData={youtubeSearchResults ? youtubeSearchResults : null} keyword={keyword} loading={loadingTables[ResultType.YOUTUBE]} setLoadingTables={setLoadingTables} apiError={youtubeApiError}/>}
+      {selectedResultType === ResultType.GOOGLE && <KeywordSuggestAPIData apiData={googleSearchResults ? googleSearchResults : null} keyword={googleKeyword} loading={loadingTables[ResultType.GOOGLE]} setLoadingTables={setLoadingTables} apiError={googleApiError}/>}
+      {selectedResultType === ResultType.YOUTUBE && <YoutubeKeywordAPIData apiData={youtubeSearchResults ? youtubeSearchResults : null} keyword={youtubeKeyword} loading={loadingTables[ResultType.YOUTUBE]} setLoadingTables={setLoadingTables} apiError={youtubeApiError}/>}
       {selectedResultType === ResultType.WEB_URL && 
         <KeywordScrape 
           apiData={webUrlKeywordResults ? webUrlKeywordResults : null} 
@@ -201,7 +229,7 @@ export const Home = () => {
           setOptimizedKeywords={setOptimizedKeywords}
         />
       }
-      {selectedResultType === ResultType.TEXT && <TextOptimize />}
+      {selectedResultType === ResultType.TEXT && <TextOptimize optimizedText={pageOptimizeOptimizedText} setOptimizedText={setPageOptimizeOptimizedText}/>}
     </div>
   )
 }

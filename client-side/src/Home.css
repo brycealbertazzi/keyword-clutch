@@ -53,6 +53,10 @@
     position: relative;
     max-width: 800px; /* Increased max-width for better readability */
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   /* Styles for the text input */

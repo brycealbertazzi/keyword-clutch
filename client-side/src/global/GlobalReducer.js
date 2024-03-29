@@ -1,9 +1,9 @@
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'OPTIMIZED_TEXT':
+        case 'WEB_URL_OPTIMIZED_TEXT':
             return {
                 ...state,
-                optimizedText: action.payload
+                webUrlOptimizedText: action.payload
             }
         case 'TMP_HIDE_FOOTER':
             return {

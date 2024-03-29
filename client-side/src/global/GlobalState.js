@@ -5,7 +5,7 @@ import Reducer from './GlobalReducer'
 export const GlobalStateProvider = ({ children }) => {
 
     const initialState = {
-        optimizedText: '',
+        webUrlOptimizedText: '',
         tmpHideFooter: false,
         websiteSEOStep: 1,
         stripeCustomer: null,
@@ -18,8 +18,8 @@ export const GlobalStateProvider = ({ children }) => {
     
     const [state, dispatch] = useReducer(Reducer, initialState)
     
-    const setOptimizedText = (payload) => {
-        dispatch({ type: 'OPTIMIZED_TEXT', payload })
+    const setWebUrlOptimizedText = (payload) => {
+        dispatch({ type: 'WEB_URL_OPTIMIZED_TEXT', payload })
     }
 
     const setTmpHideFooter = (payload) => {
@@ -40,8 +40,8 @@ export const GlobalStateProvider = ({ children }) => {
 
     return (
         <GlobalContext.Provider value={{
-            optimizedText: state.optimizedText,
-            setOptimizedText,
+            webUrlOptimizedText: state.webUrlOptimizedText,
+            setWebUrlOptimizedText,
             tmpHideFooter: state.tmpHideFooter,
             setTmpHideFooter,
             websiteSEOStep: state.websiteSEOStep,
