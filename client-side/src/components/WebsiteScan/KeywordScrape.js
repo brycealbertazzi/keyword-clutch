@@ -93,7 +93,7 @@
             {websiteSEOStep === 2 ?
               <div className='optimized-text-container'>
                 {optimizedTextSections.map((section, index) => {
-                  var pattern = /(?<=\d):(?=\d)/g
+                  var pattern = /(?<=\d):(?=\d)/g // Pattern to match colons between numbers
                   const disallowedHeaders = ['Website text', 'SEO Optimized text', 'Optimized text']
                   // Use replace method with the pattern to remove colons
                   var modifiedSectionStr = section.replace(pattern, '')
