@@ -89,7 +89,11 @@ export const Navbar = () => {
                     <FontAwesomeIcon icon={faUser} onClick={() => {setShowDropdown(!showDropdown)}} size='2x'/>
                     {showDropdown && (
                         <div className='account-dropdown'>
-                            <button onClick={() => {setPageTitle(NavbarTitles.ACCOUNT_PAGE); navigate('/account'); setShowDropdown(false)}}>Manage Account</button>
+                            {location.pathname !== '/home' ?
+                                <button onClick={() => {setPageTitle(NavbarTitles.HOME_PAGE); navigate('/home'); setShowDropdown(false)}}>Home</button>
+                            :
+                                <button onClick={() => {setPageTitle(NavbarTitles.ACCOUNT_PAGE); navigate('/account'); setShowDropdown(false)}}>Manage Account</button>
+                            }
                             <button onClick={() => {signOut(() => navigate('/')); setShowDropdown(false)}}>Sign Out</button>
                         </div>
                     )}
