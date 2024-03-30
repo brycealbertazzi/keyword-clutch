@@ -41,7 +41,7 @@ export const ManageAccount = () => {
 
     const renewSubscription = async () => {
         setLoading(true)
-        axios.post('/api/stripe/renew-subscription', { subscriptionId: stripeCustomer.customerSubscription.id }).then(() => {
+        axios.post('/api/stripe/renew-subscription', { subscriptionId: stripeCustomer?.customerSubscription?.id }).then(() => {
             console.log('Subscription renewed')
             setLoading(false)
             postHandleRenewSubscription()
@@ -72,8 +72,8 @@ export const ManageAccount = () => {
             case SubscriptionTypes.TRIALING:
                 return <button className='app-button' onClick={() => navigate('/pricing')}>Subscribe</button>
             default:
-                if (stripeCustomer?.paymentMethod) {
-                    return <button className='app-button' onClick={handleRenewSubscription}>{stripeCustomer?.paymentMethod ? 'Renew Subscription' : 'Subscribe'}</button>
+                if (stripeCustomer?.paymentMethod && stripeCustomer?.customerSubscription) {
+                    return <button className='app-button' onClick={handleRenewSubscription}>{'Renew Subscription'}</button>
                 } else {
                     return <button className='app-button' onClick={() => navigate('/pricing')}>Subscribe</button>
                 }

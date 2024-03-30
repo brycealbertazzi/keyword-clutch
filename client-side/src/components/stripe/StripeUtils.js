@@ -8,4 +8,19 @@ export const UserInfoFields = {
     STATE: 'State',
     ZIP: 'Zip Code',
     COUNTRY: 'Country',
+    NAME_ON_CARD: 'Name On Card',
+}
+
+export const CountryCodes = {
+    'United States': 'US',
+    'Canada': 'CA',
+    'United Kingdom': 'GB',
+    'Australia': 'AU',
+    'Germany': 'DE',
+    'France': 'FR',
+    'Italy': 'IT',
+    'Spain': 'ES',
+    'Japan': 'JP',
+    'China': 'CN',
+    'India': 'IN',
 }

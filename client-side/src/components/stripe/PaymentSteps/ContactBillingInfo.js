@@ -1,47 +1,65 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { UserInfoFields } from '../StripeUtils'
 import '../stripe.css'
 
-export const ContactBillingInfo = ({handleChange, setPage}) => {
+export const ContactBillingInfo = ({handleChange, setPage, userInfo}) => {
+    const [contactInfoComplete, setContactInfoComplete] = useState(false)
+
+    const checkRequiredFieldsFilledIn = () => {
+        if (!userInfo[UserInfoFields.FIRST_NAME] || !userInfo[UserInfoFields.LAST_NAME] || !userInfo[UserInfoFields.EMAIL] || !userInfo[UserInfoFields.ADDRESS_LINE1] || !userInfo[UserInfoFields.ZIP]) {
+            setContactInfoComplete(false)
+            return
+        }
+        setContactInfoComplete(true)
+    }
+
+    useEffect(() => {
+        checkRequiredFieldsFilledIn()
+    }, [userInfo])
+
+    useEffect(() => {
+        console.log(contactInfoComplete)
+    }, [contactInfoComplete])
+
     return (
         <div className='stripe-payment-container'>
             <div className='stripe-payment-section'>
                 <h5 className='stripe-form-header'>Contact Information</h5>
                 <div className='stripe-row'>
                     <div className='stripe-field'>
-                        <label className='stripe-label'>First Name</label>
-                        <input type='text' placeholder='First Name' className='stripe-input' onChange={(e) => handleChange(e, UserInfoFields.FIRST_NAME)}/>
+                        <label className='stripe-label'>First Name *</label>
+                        <input type='text' placeholder='First Name' className='stripe-input' value={userInfo[UserInfoFields.FIRST_NAME]} onChange={(e) => handleChange(e, UserInfoFields.FIRST_NAME)}/>
                     </div>
                     <div className='stripe-field'>
-                        <label className='stripe-label'>Last Name</label>
-                        <input type='text' placeholder='Last Name' className='stripe-input' onChange={(e) => handleChange(e, UserInfoFields.LAST_NAME)}/>
+                        <label className='stripe-label'>Last Name *</label>
+                        <input type='text' placeholder='Last Name' className='stripe-input' value={userInfo[UserInfoFields.LAST_NAME]} onChange={(e) => handleChange(e, UserInfoFields.LAST_NAME)}/>
                     </div>
                 </div>
                 <div className='stripe-field'>
-                    <label className='stripe-label'>Email</label>
-                    <input type='email' placeholder='Email' className='stripe-input' onChange={(e) => handleChange(e, UserInfoFields.EMAIL)}/>
+                    <label className='stripe-label'>Email *</label>
+                    <input type='email' placeholder='Email' className='stripe-input' value={userInfo[UserInfoFields.EMAIL]} onChange={(e) => handleChange(e, UserInfoFields.EMAIL)}/>
                 </div>
             </div>
             <div className='stripe-payment-section'>
                 <h5 className='stripe-form-header'>Billing Address</h5>
                 <div className='stripe-row'>
                     <div className='stripe-field'>
-                        <label className='stripe-label'>Address Line 1</label>
-                        <input type='text' placeholder='Address Line 1' className='stripe-input' onChange={(e) => handleChange(e, UserInfoFields.ADDRESS_LINE1)}/>
+                        <label className='stripe-label'>Address Line 1 *</label>
+                        <input type='text' placeholder='Address Line 1' className='stripe-input' value={userInfo[UserInfoFields.ADDRESS_LINE1]} onChange={(e) => handleChange(e, UserInfoFields.ADDRESS_LINE1)}/>
                     </div>
                     <div className='stripe-field'>
                         <label className='stripe-label'>Address Line 2</label>
-                        <input type='text' placeholder='Address Line 2' className='stripe-input' onChange={(e) => handleChange(e, UserInfoFields.ADDRESS_LINE2)}/>
+                        <input type='text' placeholder='Address Line 2' className='stripe-input' value={userInfo[UserInfoFields.ADDRESS_LINE2]} onChange={(e) => handleChange(e, UserInfoFields.ADDRESS_LINE2)}/>
                     </div>
                 </div>
                 <div className='stripe-row'>
                     <div className='stripe-field'>
                         <label className='stripe-label'>City</label>
-                        <input type='text' placeholder='City' className='stripe-input' onChange={(e) => handleChange(e, UserInfoFields.CITY)}/>
+                        <input type='text' placeholder='City' className='stripe-input' value={userInfo[UserInfoFields.CITY]} onChange={(e) => handleChange(e, UserInfoFields.CITY)}/>
                     </div>
                     <div className='stripe-field'>
                         <label htmlFor='state' className='stripe-label'>State</label>
-                        <select id="state" name="state" onChange={(e) => handleChange(e, UserInfoFields.STATE)}>
+                        <select id="state" name="state" value={userInfo[UserInfoFields.STATE]} onChange={(e) => handleChange(e, UserInfoFields.STATE)}>
                             <option value="">Select State</option>
                             <option value="AL">Alabama</option>
                             <option value="AK">Alaska</option>
@@ -99,12 +117,12 @@ export const ContactBillingInfo = ({handleChange, setPage}) => {
                 </div>
                 <div className='stripe-row'>
                     <div className='stripe-field'>
-                        <label className='stripe-label'>ZIP Code</label>
-                        <input type='text' placeholder='ZIP Code' className='stripe-input' onChange={(e) => handleChange(e, UserInfoFields.ZIP)}/>
+                        <label className='stripe-label'>ZIP Code *</label>
+                        <input type='text' placeholder='ZIP Code' className='stripe-input' value={userInfo[UserInfoFields.ZIP]} onChange={(e) => handleChange(e, UserInfoFields.ZIP)}/>
                     </div>
                     <div className='stripe-field'>
                         <label htmlFor='country' className='stripe-label'>Country</label>
-                        <select id="country" name="country"  onChange={(e) => handleChange(e, UserInfoFields.COUNTRY)}>
+                        <select id="country" name="country" value={userInfo[UserInfoFields.COUNTRY]} onChange={(e) => handleChange(e, UserInfoFields.COUNTRY)}>
                             <option value="">Select Country</option>
                             <option value="United States">United States</option>
                             <option value="Canada">Canada</option>
@@ -123,7 +141,7 @@ export const ContactBillingInfo = ({handleChange, setPage}) => {
             </div>
             <div className='stripe-step-toggle'>
                 <div></div>
-                <button onClick={() => setPage(2)} className='app-button'>Next</button>
+                <button onClick={() => setPage(2)} className='app-button' disabled={!contactInfoComplete}>Next</button>
             </div>
         </div>
     )

@@ -22,7 +22,7 @@ export const PopUpModal = ({submitFunc, closeFunc}) => {
                 {submitFunc ?
                     <div className="modal-actions">
                         <button onClick={() => handleCloseModal()} className="app-button">Cancel</button>
-                        <button onClick={() => {submitFunc(); handleCloseModal()}} className="app-button">Submit</button>
+                        <button onClick={() => {submitFunc(); handleCloseModal()}} className="app-button">Confirm</button>
                     </div>
                     :
                     <div className="modal-actions" style={{justifyContent: 'center'}}>

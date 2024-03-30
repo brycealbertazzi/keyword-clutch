@@ -47,6 +47,17 @@
   background-color: #444;
 }
 
+.app-button:hover {
+  transform: scale(1.10);
+}
+
+.app-button:disabled {
+  cursor: not-allowed;
+  background-color: #666;
+  border-color: #666;
+  color: #999;
+}
+
 .page-content {
   display: flex;
   flex-direction: column;
@@ -57,8 +68,4 @@
 
 .hidden-button {
   display: none;
-}
-
-.app-button:hover {
-  transform: scale(1.10);
 }

@@ -11,6 +11,7 @@ import { ReviewSubmit } from './PaymentSteps/ReviewSubmit'
 import { PaymentDetails } from './PaymentSteps/PaymentDetails'
 import { PopUpModal } from '../PopUpModal'
 import { LoadingSpinner } from '../../LoadingSpinner'
+import { CountryCodes, UserInfoFields } from './StripeUtils'
 
 export const PaymentForm = () => {
     const navigate = useNavigate()
@@ -29,10 +30,22 @@ export const PaymentForm = () => {
     const subscribe = async (e) => {
         setLoading(true)
         setHideReviewSubmit(true)
-        const {error, paymentMethod} = await stripe.createPaymentMethod({
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
-            card: elements.getElement(CardElement)
-        })
+            card: elements.getElement(CardElement),
+            billing_details: {
+              name: userInfo[UserInfoFields.FIRST_NAME] + ' ' + userInfo[UserInfoFields.LAST_NAME],
+              email: userInfo[UserInfoFields.EMAIL],
+              address: {
+                line1: userInfo[UserInfoFields.ADDRESS_LINE1],
+                line2: userInfo[UserInfoFields.ADDRESS_LINE2] ? userInfo[UserInfoFields.ADDRESS_LINE2] : null,
+                postal_code: userInfo[UserInfoFields.ZIP],
+                city: userInfo[UserInfoFields.CITY] ? userInfo[UserInfoFields.CITY] : null,
+                state: userInfo[UserInfoFields.STATE] ? userInfo[UserInfoFields.STATE] : null,
+                country: CountryCodes[userInfo[UserInfoFields.COUNTRY]] ? CountryCodes[userInfo[UserInfoFields.COUNTRY]] : null,
+              },
+            },
+          });
         if (error) {
             console.error('Error creating payment method:', error)
         }
@@ -43,7 +56,7 @@ export const PaymentForm = () => {
         }
         await axios.post('/api/stripe/subscribe', {
             customerObj: userInfo,
-            paymentMethodId: id
+            paymentMethodId: id,
         }).then(res => {
             console.log('Subscription started: ', res.data)
             postHandleSubscribe()
@@ -71,6 +84,10 @@ export const PaymentForm = () => {
     }
 
     useEffect(() => {
+        console.log(userInfo)
+    }, [userInfo])
+
+    useEffect(() => {
         switch (page) {
             case 1:
                 setHidePaymentDetails(true)
@@ -92,7 +109,7 @@ export const PaymentForm = () => {
     if (page === 1) {
         return (
             <div className='stripe-page-container'>
-                <ContactBillingInfo handleChange={handleChange} setPage={setPage} />
+                <ContactBillingInfo handleChange={handleChange} setPage={setPage} userInfo={userInfo}/>
             </div>
         )
     }
@@ -104,7 +121,7 @@ export const PaymentForm = () => {
                     <LoadingSpinner type={null}/>
                 </div> 
             }
-            <PaymentDetails setPage={setPage} hidePaymentDetails={hidePaymentDetails}/>
+            <PaymentDetails handleChange={handleChange} setPage={setPage} hidePaymentDetails={hidePaymentDetails} userInfo={userInfo}/>
             <ReviewSubmit userInfo={userInfo} setPage={setPage} handleSubmit={handleSubscribe} hideReviewSubmit={hideReviewSubmit}/>
             {popUpModalData && popUpModalData.open && <PopUpModal submitFunc={submitFunc?.current} closeFunc={closeFunc?.current}/>}
         </div>
