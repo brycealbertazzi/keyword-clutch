@@ -91,7 +91,7 @@ export const Navbar = () => {
                     <FontAwesomeIcon icon={faUser} onClick={() => {setShowDropdown(!showDropdown)}} size='2x'/>
                     {showDropdown && (
                         <div className='account-dropdown'>
-                            {!(location.pathname !== '/home' || location.pathname === '/') ?
+                            {!(location.pathname === '/home' || location.pathname === '/') ?
                                 <button onClick={() => {setPageTitle(NavbarTitles.HOME_PAGE); navigate('/home'); setShowDropdown(false)}}>Home</button>
                             :
                                 <button onClick={() => {setPageTitle(NavbarTitles.ACCOUNT_PAGE); navigate('/account'); setShowDropdown(false)}}>Manage Account</button>

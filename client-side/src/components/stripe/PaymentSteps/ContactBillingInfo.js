@@ -17,10 +17,6 @@ export const ContactBillingInfo = ({handleChange, setPage, userInfo}) => {
         checkRequiredFieldsFilledIn()
     }, [userInfo])
 
-    useEffect(() => {
-        console.log(contactInfoComplete)
-    }, [contactInfoComplete])
-
     return (
         <div className='stripe-payment-container'>
             <div className='stripe-payment-section'>

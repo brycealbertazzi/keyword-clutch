@@ -84,10 +84,6 @@ export const PaymentForm = () => {
     }
 
     useEffect(() => {
-        console.log(userInfo)
-    }, [userInfo])
-
-    useEffect(() => {
         switch (page) {
             case 1:
                 setHidePaymentDetails(true)
