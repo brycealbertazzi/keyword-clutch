@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import './KeywordSearch.css'
+import '../../App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
-import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faArrowLeft, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { ResultType, ResultTypeColors } from '../../Utils';
 import { Error } from '../error/Error';
@@ -59,7 +60,13 @@ export const KeywordSuggestAPIData = ({apiData, keyword, loading, setLoadingTabl
                 </div>
                 <div className="data-field">
                     <div className='data-field-title'>
-                        <h3 className='data-label'>CPC</h3>
+                        <h3 className='data-label'>
+                            CPC &nbsp;
+                            <span className="tooltip">
+                                <FontAwesomeIcon icon={faQuestionCircle} />
+                                <span className="tooltip-text">Cost Per Click - The average amount you pay each time someone clicks on an ad triggered by a specific keyword. Higher CPCs associated with a keyword often signify heightened competition or a more targeted audience, indicating potentially higher costs for advertising campaigns.</span>
+                            </span>
+                        </h3>
                     </div>
                     {currentRows.map((keyword, index) => {
                         return <div key={index} className="data-cell">{keyword?.cpc || keyword?.cpc === 0 ? keyword.cpc : '-'}</div>
@@ -67,7 +74,13 @@ export const KeywordSuggestAPIData = ({apiData, keyword, loading, setLoadingTabl
                 </div>
                 <div className="data-field">
                     <div className='data-field-title'>
-                        <h3 className='data-label'>KD</h3>
+                        <h3 className='data-label'>
+                            KD &nbsp;
+                            <span className="tooltip">
+                                <FontAwesomeIcon icon={faQuestionCircle} />
+                                <span className="tooltip-text">Keyword Difficulty - An estimate of the challenge involved in achieving organic ranking for a particular keyword within search engine results. Higher KD scores for a keyword suggest that it may require more extensive optimization efforts and content quality to compete effectively for visibility against other search results.</span>
+                            </span>
+                        </h3>
                     </div>
                     {currentRows.map((keyword, index) => {
                         return <div key={index} className="data-cell">{keyword?.kd || keyword?.kd === 0 ? keyword.kd : '-'}</div>
@@ -75,7 +88,13 @@ export const KeywordSuggestAPIData = ({apiData, keyword, loading, setLoadingTabl
                 </div>
                 <div className="data-field">
                     <div className='data-field-title'>
-                        <h3 className='data-label'>PD</h3>
+                        <h3 className='data-label'>
+                            PD &nbsp;
+                            <span className="tooltip">
+                                <FontAwesomeIcon icon={faQuestionCircle} />
+                                <span className="tooltip-text">Paid Difficulty - A metric indicating the level of competition among advertisers bidding on a specific keyword for paid search advertising placement. Elevated PD values associated with a keyword signify intensified competition, potentially leading to increased costs per click and a more aggressive battle for ad visibility in search engine results pages.</span>
+                            </span>
+                        </h3>
                     </div>
                     {currentRows.map((keyword, index) => {
                         return <div key={index} className="data-cell">{keyword?.pd || keyword?.pd === 0 ? keyword.pd : '-'}</div>

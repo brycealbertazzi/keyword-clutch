@@ -3,10 +3,11 @@ import React, {useState, useEffect} from 'react'
 import './KeywordSearch.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faArrowLeft, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { ResultType, ResultTypeColors } from '../../Utils';
 import { Error } from '../error/Error';
+import '../../App.css'
 
 export const YoutubeKeywordAPIData = ({apiData, keyword, loading, setLoadingTables, apiError}) => {
     const [currentPage, setCurrentPage] = useState(0)
@@ -76,7 +77,13 @@ export const YoutubeKeywordAPIData = ({apiData, keyword, loading, setLoadingTabl
                 </div>
                 <div className="data-field">
                     <div className='data-field-title'>
-                        <h3 className='data-label'>Overall Score</h3>
+                        <h3 className='data-label'>
+                            Overall Score &nbsp;
+                            <span className="tooltip">
+                                <FontAwesomeIcon icon={faQuestionCircle} />
+                                <span className="tooltip-text">The overall score is a general evaluation of the keyword and is a metric for how strongly we would recommend the keyword for SEO. This takes into account competition, search volume and other factors.</span>
+                            </span>
+                        </h3>
                     </div>
                     {currentRows.map((keyword, index) => {
                         return <div key={index} className="data-cell">{keyword?.overallscore || keyword?.overallscore === 0 ? keyword.overallscore : '-'}</div>
