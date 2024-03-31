@@ -4,7 +4,8 @@
     align-items: center;
     box-sizing: border-box;
     justify-content: space-between;
-    width: calc(100% - 40px);
+    width: min(calc(100% - 40px), 1360px);
+    min-width: 900px;
     padding: 0 30px;
 }
 
