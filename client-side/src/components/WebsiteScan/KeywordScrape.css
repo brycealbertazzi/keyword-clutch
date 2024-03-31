@@ -4,8 +4,7 @@
     align-items: center;
     box-sizing: border-box;
     justify-content: space-between;
-    max-width: 100%;
-    margin: 20px 0;
+    width: calc(100% - 40px);
     padding: 0 30px;
 }
 
@@ -17,8 +16,8 @@
     margin: 20px 0;
     border-radius: 10px;
     border: 3px solid #ad9f2f;
-    min-width: 1360px;
-    width: 1360px;
+    width: min(calc(100% - 80px), 1360px);
+    min-width: 900px;
     padding: 0 20px;
     background-color: #3d3d3d;
 }
@@ -67,7 +66,8 @@
     margin: 20px 0;
     border-radius: 10px;
     border: 3px solid #ad9f2f;
-    max-width: 1360px;
+    width: min(calc(100% - 80px), 1360px);
+    min-width: 900px;
 }
 
 .optimized-text-section {

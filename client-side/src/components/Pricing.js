@@ -6,7 +6,7 @@ import './Pricing.css'
 import '../App.css'
 import { useUser, SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
 import axios from 'axios'
-import { SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
+import { ResultType, ResultTypeColors, SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
 import { PopUpModal } from './PopUpModal'
 import { LoadingSpinner } from '../LoadingSpinner'
 
@@ -59,12 +59,12 @@ export const Pricing = () => {
         <div className='page-content'>
             <div className='pricing-card '>
                 <h1 style={{textAlign: 'center'}}>Subscription - $10.00/mo</h1>
-                <h3>- 3 day free trial - no card required</h3>
-                <h3>- Get access to all of our features</h3>
-                <h3>- Unlimited Google keyword searches</h3>
-                <h3>- Unlimited Youtube keyword searches</h3>
-                <h3>- Unlimited website scans</h3>
-                <h3>- Unlimited SEO text optimizations</h3>
+                <h3 style={{fontSize: '25px'}}>- 3 day free trial (no card required)</h3>
+                <h3 style={{fontSize: '25px'}}>- Get access to all of our features</h3>
+                <h3 style={{fontSize: '25px'}}>- Unlimited <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>website</span> scans</h3>
+                <h3 style={{fontSize: '25px'}}>- Unlimited <span style={{color: ResultTypeColors[ResultType.TEXT]}}>SEO text</span> optimizations</h3>
+                <h3 style={{fontSize: '25px'}}>- Unlimited <span style={{color: ResultTypeColors[ResultType.GOOGLE]}}>Google</span> keyword searches</h3>
+                <h3 style={{fontSize: '25px'}}>- Unlimited <span style={{color: ResultTypeColors[ResultType.YOUTUBE]}}>Youtube</span> keyword searches</h3>
                 <div className='pricing-pg-buttons'>
                     <SignedOut>
                         <SignInButton className='app-button' redirectUrl='/pricing'>

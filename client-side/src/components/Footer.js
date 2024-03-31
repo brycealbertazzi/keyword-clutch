@@ -20,19 +20,7 @@ export const Footer = () => {
                     <div>
                         <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
                     </div>
-                    <div>
-                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-                    </div>
-                    <div>
-                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-                    </div>
                     <p>© 2024 Keyword Clutch</p>
-                    <div>
-                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-                    </div>
-                    <div>
-                        <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
-                    </div>
                     <div>
                         <img width={100} height={100} src={KeywordClutchLogo} alt='Rank Rocket Logo' />
                     </div>

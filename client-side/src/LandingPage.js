@@ -12,31 +12,32 @@ export const LandingPage = () => {
 
   return (
     <div className='page-content'>
-        <div className='landing-pg-text-content'>
-          <div className='bulletpoint-container'>
-            <h1 style={{fontSize: '45px'}}>The most handy SEO keyword reasearch tool</h1>
-            <h2 style={{fontSize: '30px'}} className='bulletpoint'>- Up your SEO game</h2>
-            <h2 style={{fontSize: '30px'}} className='bulletpoint'>- Gain key insider infomation about keywords such as cost per click, search volume and more</h2>
-            <h2 style={{fontSize: '30px'}} className='bulletpoint'>- Scan any website to see its keywords</h2>
-            <h2 style={{fontSize: '30px'}} className='bulletpoint'>- Get an edge over cometitors, rank higher and bring more traffic to your website</h2>
-            <button className='app-button' onClick={() => navigate('/pricing')}>See Pricing</button>
+      <div className='landing-pg-text-content'>
+        <div className='bulletpoint-container'>
+          <h1 style={{fontSize: '30px'}}>Convenient, all-in-one SEO keyword research tool</h1>
+          <h2 style={{fontSize: '25px'}} className='bulletpoint'>- Up your SEO game</h2>
+          <h2 style={{fontSize: '25px'}} className='bulletpoint'>- Gain key insider infomation about keywords such as cost per click, search volume and more</h2>
+          <h2 style={{fontSize: '25px'}} className='bulletpoint'>- Scan any website to see its keywords</h2>
+          <h2 style={{fontSize: '25px'}} className='bulletpoint'>- Optimize website text for keywords</h2>
+          <h2 style={{fontSize: '25px'}} className='bulletpoint'>- Get an edge over cometitors, rank higher and bring more traffic to your website</h2>
+          <button className='app-button' onClick={() => navigate('/pricing')}>See Pricing</button>
+        </div>
+      </div>
+      <div className='landing-pg-logos'>
+          <div className='logos-top'>
+            <div className='logo'>
+              <FontAwesomeIcon icon={faGoogle} size='7x' color={ResultTypeColors[ResultType.GOOGLE]}/>
+            </div>
+            <div className='logo'>
+              <FontAwesomeIcon icon={faYoutube}  size='7x' color={ResultTypeColors[ResultType.YOUTUBE]}/>
+            </div>
           </div>
-        </div>
-        <div className='landing-pg-logos'>
-            <div className='logos-top'>
-              <div className='logo'>
-                <FontAwesomeIcon icon={faGoogle} size='10x' color={ResultTypeColors[ResultType.GOOGLE]}/>
-              </div>
-              <div className='logo'>
-                <FontAwesomeIcon icon={faYoutube}  size='10x' color={ResultTypeColors[ResultType.YOUTUBE]}/>
-              </div>
+          <div className='logo-bottom'>
+            <div className='logo'>
+              <FontAwesomeIcon icon={faGlobe}  size='7x' color={ResultTypeColors[ResultType.WEB_URL]}/>
             </div>
-            <div className='logo-bottom'>
-              <div className='logo'>
-                <FontAwesomeIcon icon={faGlobe}  size='10x' color={ResultTypeColors[ResultType.WEB_URL]}/>
-              </div>
-            </div>
-        </div>
+          </div>
+      </div>
     </div>
   )
 }

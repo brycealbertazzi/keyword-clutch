@@ -22,72 +22,78 @@ export const KeywordSuggestAPIData = ({apiData, keyword, loading, setLoadingTabl
         setLoadingTables({...setLoadingTables, [ResultType.GOOGLE]: false})
     }, [currentRows])
 
+    if (apiError) {
+        return <Error resultType={ResultType.GOOGLE} input={keyword}/>
+    }
+
+    if (loading) {
+        return <LoadingSpinner type={ResultType.GOOGLE}/>
+    }
+
+    if (!apiData) {
+        return null
+    }
+
     return (
-        <div>
-        {apiError && <Error resultType={ResultType.GOOGLE} input={keyword}/>}
-        {loading && <LoadingSpinner type={ResultType.GOOGLE}/>}
-        {apiData && !loading && !apiError &&
-            <div>
-                <h2 style={{textAlign: 'center'}}>Google Search Results for <span style={{color: ResultTypeColors[ResultType.GOOGLE]}}>{keyword}</span></h2>
-                <div className="data-container" style={{borderColor: ResultTypeColors[ResultType.GOOGLE]}}>
-                    <div className="data-field">
-                        <div className='data-field-title'>
-                            <h3 className='data-label'>Keywords</h3>
-                        </div>
-                        {currentRows.map((keyword, index) => {
-                            return <div key={index} className="data-cell">{keyword?.text || keyword?.text === 0 ? keyword.text.toLowerCase() : '-'}</div>
-                        })}
+        <>
+            <h2 style={{textAlign: 'center'}}>Google Search Results for <span style={{color: ResultTypeColors[ResultType.GOOGLE]}}>{keyword}</span></h2>
+            <div className="data-container" style={{borderColor: ResultTypeColors[ResultType.GOOGLE]}}>
+                <div className="data-field">
+                    <div className='data-field-title'>
+                        <h3 className='data-label'>Keywords</h3>
                     </div>
-                    <div className="data-field">
-                        <div className='data-field-title'>
-                            <h3 className='data-label'>
-                                <FontAwesomeIcon icon={faGoogle} />&nbsp;
-                                Search Volume
-                            </h3>
-                        </div>
-                        {currentRows.map((keyword, index) => {
-                            return <div key={index} className="data-cell">{keyword?.search_volume || keyword?.search_volume === 0 ? keyword.search_volume : '-'}</div>
-                        })}
-                    </div>
-                    <div className="data-field">
-                        <div className='data-field-title'>
-                            <h3 className='data-label'>CPC</h3>
-                        </div>
-                        {currentRows.map((keyword, index) => {
-                            return <div key={index} className="data-cell">{keyword?.cpc || keyword?.cpc === 0 ? keyword.cpc : '-'}</div>
-                        })}
-                    </div>
-                    <div className="data-field">
-                        <div className='data-field-title'>
-                            <h3 className='data-label'>KD</h3>
-                        </div>
-                        {currentRows.map((keyword, index) => {
-                            return <div key={index} className="data-cell">{keyword?.kd || keyword?.kd === 0 ? keyword.kd : '-'}</div>
-                        })}
-                    </div>
-                    <div className="data-field">
-                        <div className='data-field-title'>
-                            <h3 className='data-label'>PD</h3>
-                        </div>
-                        {currentRows.map((keyword, index) => {
-                            return <div key={index} className="data-cell">{keyword?.pd || keyword?.pd === 0 ? keyword.pd : '-'}</div>
-                        })}
-                    </div>
+                    {currentRows.map((keyword, index) => {
+                        return <div key={index} className="data-cell">{keyword?.text || keyword?.text === 0 ? keyword.text.toLowerCase() : '-'}</div>
+                    })}
                 </div>
-                {/* Page arrows */}
-                <div className='table-footer'>
-                    <h4 className='page-row-display'>{(currentPage * 25) + 1}-{Math.min((currentPage + 1) * 25, apiData.length)}/{apiData.length}</h4>
-                    <div className='page-arrows'>
-                        <button disabled={currentPage <= 0} onClick={() => setCurrentPage(currentPage - 1)} style={{backgroundColor: currentPage <= 0 ? '#555' : '#4285F4'}}>
-                            <FontAwesomeIcon icon={faArrowLeft} />
-                        </button>
-                        <button disabled={(currentPage + 1) * 25 > apiData.length} onClick={() => setCurrentPage(currentPage + 1)} style={{backgroundColor: (currentPage + 1) * 25 > apiData.length ? '#555' : '#4285F4'}}>
-                            <FontAwesomeIcon icon={faArrowRight} />
-                        </button>
+                <div className="data-field">
+                    <div className='data-field-title'>
+                        <h3 className='data-label'>
+                            <FontAwesomeIcon icon={faGoogle} />&nbsp;
+                            Search Volume
+                        </h3>
                     </div>
+                    {currentRows.map((keyword, index) => {
+                        return <div key={index} className="data-cell">{keyword?.search_volume || keyword?.search_volume === 0 ? keyword.search_volume : '-'}</div>
+                    })}
+                </div>
+                <div className="data-field">
+                    <div className='data-field-title'>
+                        <h3 className='data-label'>CPC</h3>
+                    </div>
+                    {currentRows.map((keyword, index) => {
+                        return <div key={index} className="data-cell">{keyword?.cpc || keyword?.cpc === 0 ? keyword.cpc : '-'}</div>
+                    })}
+                </div>
+                <div className="data-field">
+                    <div className='data-field-title'>
+                        <h3 className='data-label'>KD</h3>
+                    </div>
+                    {currentRows.map((keyword, index) => {
+                        return <div key={index} className="data-cell">{keyword?.kd || keyword?.kd === 0 ? keyword.kd : '-'}</div>
+                    })}
+                </div>
+                <div className="data-field">
+                    <div className='data-field-title'>
+                        <h3 className='data-label'>PD</h3>
+                    </div>
+                    {currentRows.map((keyword, index) => {
+                        return <div key={index} className="data-cell">{keyword?.pd || keyword?.pd === 0 ? keyword.pd : '-'}</div>
+                    })}
                 </div>
             </div>
-        }
-        </div>
+            {/* Page arrows */}
+            <div className='table-footer'>
+                <h4 className='page-row-display'>{(currentPage * 25) + 1}-{Math.min((currentPage + 1) * 25, apiData.length)}/{apiData.length}</h4>
+                <div className='page-arrows'>
+                    <button disabled={currentPage <= 0} onClick={() => setCurrentPage(currentPage - 1)} style={{backgroundColor: currentPage <= 0 ? '#555' : '#4285F4'}}>
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                    </button>
+                    <button disabled={(currentPage + 1) * 25 > apiData.length} onClick={() => setCurrentPage(currentPage + 1)} style={{backgroundColor: (currentPage + 1) * 25 > apiData.length ? '#555' : '#4285F4'}}>
+                        <FontAwesomeIcon icon={faArrowRight} />
+                    </button>
+                </div>
+            </div>
+        </>
     )
 }

@@ -69,78 +69,84 @@
       setLoadingTables({...setLoadingTables, [ResultType.WEB_URL]: false})
     }, [keywordGroups])
 
+    if (apiError) {
+      return <Error resultType={ResultType.WEB_URL} input={url}/>
+    }
+
+    if (loading) {
+      return <LoadingSpinner type={ResultType.WEB_URL}/>
+    }
+
+    if (!apiData) {
+      return null
+    }
+
     return (
-      <div>
-        {apiError && <Error resultType={ResultType.WEB_URL} input={url}/>}
-        {loading && <LoadingSpinner type={ResultType.WEB_URL}/>}
-        {apiData && !loading && !apiError &&
+      <>
+        <div className='keyword-scrape-action-items'>
+          <div></div>
           <div>
-            <div className='keyword-scrape-action-items'>
-              <div></div>
-              <div>
-                {websiteSEOStep === 1 && <h2 style={{textAlign: 'center'}}>Select keywords for SEO optimization</h2>}
-                {websiteSEOStep === 2 && <h2 style={{textAlign: 'center'}}>SEO optimized text for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>}
-              </div>
-              <div>
-                <button className={websiteSEOStep >= 2 ? 'hidden-button' : 'app-button'} onClick={() => {
-                  if (websiteSEOStep === 1) optimizeForKeywords()
-                  setWebsiteSEOStep(2)
-                }}>
-                  Generate&nbsp;
-                </button>
-              </div>
+            {websiteSEOStep === 1 && <h2 style={{textAlign: 'center'}}>Select keywords for SEO optimization</h2>}
+            {websiteSEOStep === 2 && <h2 style={{textAlign: 'center'}}>SEO optimized text for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>}
+          </div>
+          <div>
+            <button className={websiteSEOStep >= 2 ? 'hidden-button' : 'app-button'} onClick={() => {
+              if (websiteSEOStep === 1) optimizeForKeywords()
+              setWebsiteSEOStep(2)
+            }}>
+              Generate&nbsp;
+            </button>
+          </div>
+        </div>
+        {websiteSEOStep === 2 ?
+          <div className='optimized-text-container'>
+            {optimizedTextSections.map((section, index) => {
+              var pattern = /(?<=\d):(?=\d)/g // Pattern to match colons between numbers
+              const disallowedHeaders = ['Website text', 'SEO Optimized text', 'Optimized text']
+              // Use replace method with the pattern to remove colons
+              var modifiedSectionStr = section.replace(pattern, '')
+              let sectionSplit = modifiedSectionStr.split(':')
+              sectionSplit = sectionSplit.filter((section) => !disallowedHeaders.includes(section))
+              console.log(sectionSplit)
+              if (sectionSplit.length > 2) {
+                return (
+                  <div key={index} className='optimized-text-section'> 
+                    {sectionSplit.map((split, idx) => {
+                      return (<p key={idx} style={{textAlign: 'center', lineHeight: '1.75em'}}>{split}</p>)
+                    })}
+                  </div>
+                )
+              } else {
+                const header = sectionSplit[0].replace(':', '')
+                let content = sectionSplit[1] ? sectionSplit[1] : ''
+                const LONG_HEADER = header.length > 30
+                if (LONG_HEADER > 30) {
+                  content = header.concat(content)
+                }
+                return (
+                  <div key={index} className='optimized-text-section'>
+                    {content && !LONG_HEADER && <h3 style={{textAlign: 'center'}}>{header}</h3>}
+                    <p style={{textAlign: 'center', lineHeight: '1.75em'}}>{content ? content : header}</p>
+                  </div>
+                )
+              }
+            })}
+          </div>
+        :
+          <div className='keyword-scrape-container'>
+            <div className='keyword-display'>
+              {keywordGroups.map((keywordGroup, grpIndex) => {
+                return (
+                  <div key={grpIndex} className='keyword-display-group'>
+                    {keywordGroup.map((keyword, cellIndex) => 
+                      <KeywordCell key={`${grpIndex}${cellIndex}`} keyword={keyword} selectKeyword={selectKeyword}/>
+                    )}
+                  </div>
+                )
+              })}
             </div>
-            {websiteSEOStep === 2 ?
-              <div className='optimized-text-container'>
-                {optimizedTextSections.map((section, index) => {
-                  var pattern = /(?<=\d):(?=\d)/g // Pattern to match colons between numbers
-                  const disallowedHeaders = ['Website text', 'SEO Optimized text', 'Optimized text']
-                  // Use replace method with the pattern to remove colons
-                  var modifiedSectionStr = section.replace(pattern, '')
-                  let sectionSplit = modifiedSectionStr.split(':')
-                  sectionSplit = sectionSplit.filter((section) => !disallowedHeaders.includes(section))
-                  console.log(sectionSplit)
-                  if (sectionSplit.length > 2) {
-                    return (
-                      <div key={index} className='optimized-text-section'> 
-                        {sectionSplit.map((split, idx) => {
-                          return (<p key={idx} style={{textAlign: 'center', lineHeight: '1.75em'}}>{split}</p>)
-                        })}
-                      </div>
-                    )
-                  } else {
-                    const header = sectionSplit[0].replace(':', '')
-                    let content = sectionSplit[1] ? sectionSplit[1] : ''
-                    const LONG_HEADER = header.length > 30
-                    if (LONG_HEADER > 30) {
-                      content = header.concat(content)
-                    }
-                    return (
-                      <div key={index} className='optimized-text-section'>
-                        {content && !LONG_HEADER && <h3 style={{textAlign: 'center'}}>{header}</h3>}
-                        <p style={{textAlign: 'center', lineHeight: '1.75em'}}>{content ? content : header}</p>
-                      </div>
-                    )
-                  }
-                })}
-              </div>
-            :
-              <div className='keyword-scrape-container'>
-                <div className='keyword-display'>
-                  {keywordGroups.map((keywordGroup, grpIndex) => {
-                    return (
-                      <div key={grpIndex} className='keyword-display-group'>
-                        {keywordGroup.map((keyword, cellIndex) => 
-                          <KeywordCell key={`${grpIndex}${cellIndex}`} keyword={keyword} selectKeyword={selectKeyword}/>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            }
           </div>
         }
-      </div>
+      </>
     )
   }
