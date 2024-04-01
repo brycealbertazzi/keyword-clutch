@@ -40,7 +40,9 @@ export const Home = () => {
 
   const [websiteText, setWebsiteText] = useState('')
   const [optimizedKeywords, setOptimizedKeywords] = useState([])
+  const [pageOptimizeUserInputText, setPageOptimizeUserInputText] = useState('')
   const [pageOptimizeOptimizedText, setPageOptimizeOptimizedText] = useState('')
+  const [pageOptimizeOptimizedKeywords, setPageOptimizeOptimizedKeywords] = useState([])
 
   const submitGoogleKeyword = () => {
     const currentKeyword = userInput[InputType.KEYWORD]
@@ -229,7 +231,7 @@ export const Home = () => {
           setOptimizedKeywords={setOptimizedKeywords}
         />
       }
-      {selectedResultType === ResultType.TEXT && <TextOptimize optimizedText={pageOptimizeOptimizedText} setOptimizedText={setPageOptimizeOptimizedText}/>}
+      {selectedResultType === ResultType.TEXT && <TextOptimize userInputText={pageOptimizeUserInputText} setUserInputText={setPageOptimizeUserInputText} optimizedText={pageOptimizeOptimizedText} setOptimizedText={setPageOptimizeOptimizedText} optimizedKeywords={pageOptimizeOptimizedKeywords} setOptimizedKeywords={setPageOptimizeOptimizedKeywords}/>}
     </div>
   )
 }

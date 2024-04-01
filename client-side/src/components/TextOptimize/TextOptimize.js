@@ -5,13 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import { LoadingSpinner } from '../../LoadingSpinner'
 import { Error } from '../error/Error'
-import { ResultType } from '../../Utils'
+import { ResultType, ResultTypeColors } from '../../Utils'
 
-export const TextOptimize = ({optimizedText, setOptimizedText}) => {
+export const TextOptimize = ({userInputText, setUserInputText, optimizedText, setOptimizedText, optimizedKeywords, setOptimizedKeywords}) => {
     const [chosenKeywords, setChosenKeywords] = useState([])
     const [chosenKeywordInput, setChosenKeywordInput] = useState('')
     const [loading, setLoading] = useState(false)
     const [apiError, setApiError] = useState(false)
+    const [showingOptimizedText, setShowingOptimizedText] = useState(false)
     
     const submitKeyword = (e) => {
         e.preventDefault()
@@ -31,7 +32,7 @@ export const TextOptimize = ({optimizedText, setOptimizedText}) => {
     }
 
     const handleChangeTextInput = (e) => {
-        setOptimizedText(e.target.value)
+        setUserInputText(e.target.value)
     }
 
     const removeKeyword = (keyword) => {
@@ -39,18 +40,21 @@ export const TextOptimize = ({optimizedText, setOptimizedText}) => {
     }
 
     const submitTextForOptimization = () => {
-        if (optimizedText.length === 0 || chosenKeywords.length === 0) {
+        setOptimizedKeywords(chosenKeywords)
+        setChosenKeywords([])
+        if (userInputText.length === 0 || chosenKeywords.length === 0) {
             setApiError(true)
             return
         }
         setLoading(true)
         axios.get('/api/data/text', {
             params: {
-                text: optimizedText,
+                text: userInputText,
                 keywords: chosenKeywords
             }
         }).then((response) => {
             setOptimizedText(response?.data ? response.data : '')
+            setShowingOptimizedText(true)
         }).catch((error) => {
             console.error('Error:', error)
             setApiError(true)
@@ -74,23 +78,73 @@ export const TextOptimize = ({optimizedText, setOptimizedText}) => {
     }
 
     const MAX_SELECTED_KEYWORDS = 5
-    return (
-        <div className='text-optimize-container'>
-            <div className="keyword-container">
-                <input type="text" id="keyword-input" value={chosenKeywordInput} placeholder="Type a keyword and press Enter... (min. 3 characters)" onChange={handleChangeKeywordInput} onKeyDown={handleKeyDown} disabled={chosenKeywords.length >= MAX_SELECTED_KEYWORDS}/>
-                <div id="keyword-list">
-                    {chosenKeywords.map((keyword, index) => {
-                        return (<div key={index} className="keyword-box">
-                            {keyword}&nbsp;&nbsp;
-                            <FontAwesomeIcon icon={faX} size='sm' color='red' onClick={() => removeKeyword(keyword)}/>
-                        </div>)
-                    })}
+    if (showingOptimizedText) {
+        return (
+            <div className='text-optimize-container'>
+                <div className='text-optimize-headers'>
+                    <h2 style={{textAlign: 'center'}}>Optimized for keywords: {
+                        optimizedKeywords.map((keyword, index) => <span key={index} style={{color: ResultTypeColors[ResultType.TEXT]}}>{keyword}{index !== optimizedKeywords.length - 1 ? ',' : ''}&nbsp;</span>)
+                    }</h2>
+                </div>
+                <div className="text-input-container">
+                    <textarea className="text-input" value={optimizedText} disabled={true}></textarea>
+                    <button className="app-button" onClick={() => setShowingOptimizedText(false)}>Back</button>
                 </div>
             </div>
-            <div className="text-input-container">
-                <textarea className="text-input" placeholder="Paste text for optimization..." onChange={handleChangeTextInput} value={optimizedText}></textarea>
-                <button className="app-button" onClick={submitTextForOptimization} disabled={chosenKeywords.length <= 0 || optimizedText.length <= 0}>Optimize</button>
+        )
+    } else {
+        return (
+            <div className='text-optimize-container'>
+                <div className="keyword-container">
+                    <input type="text" id="keyword-input" value={chosenKeywordInput} placeholder="Type a keyword and press Enter... (min. 3 characters)" onChange={handleChangeKeywordInput} onKeyDown={handleKeyDown} disabled={chosenKeywords.length >= MAX_SELECTED_KEYWORDS}/>
+                    <div id="keyword-list">
+                        {chosenKeywords.map((keyword, index) => {
+                            return (<div key={index} className="keyword-box">
+                                {keyword}&nbsp;&nbsp;
+                                <FontAwesomeIcon icon={faX} size='sm' color='red' onClick={() => removeKeyword(keyword)}/>
+                            </div>)
+                        })}
+                    </div>
+                </div>
+                <div className="text-input-container">
+                    <textarea className="text-input" placeholder="Paste text for optimization..." onChange={handleChangeTextInput} value={userInputText}></textarea>
+                    <div className='optimize-action-buttons'>
+                        <button className="app-button" onClick={submitTextForOptimization} disabled={chosenKeywords.length <= 0 || userInputText.length <= 0}>Optimize</button>
+                        {optimizedText.length > 0 && <button className="app-button" onClick={() => setShowingOptimizedText(true)}>Prev Optimized Text</button>}
+                    </div>
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
+
+    // return (
+    //     <div className='text-optimize-container'>
+    //         <div className="keyword-container">
+    //             <input type="text" id="keyword-input" value={chosenKeywordInput} placeholder="Type a keyword and press Enter... (min. 3 characters)" onChange={handleChangeKeywordInput} onKeyDown={handleKeyDown} disabled={chosenKeywords.length >= MAX_SELECTED_KEYWORDS}/>
+    //             <div id="keyword-list">
+    //                 {chosenKeywords.map((keyword, index) => {
+    //                     return (<div key={index} className="keyword-box">
+    //                         {keyword}&nbsp;&nbsp;
+    //                         <FontAwesomeIcon icon={faX} size='sm' color='red' onClick={() => removeKeyword(keyword)}/>
+    //                     </div>)
+    //                 })}
+    //             </div>
+    //         </div>
+    //         {showingOptimizedText ? 
+    //             <div className="text-input-container">
+    //                 <textarea className="text-input" value={optimizedText} disabled={true}></textarea>
+    //                 <button className="app-button" onClick={() => setShowingOptimizedText(false)}>Back</button>
+    //             </div>
+    //         :
+    //             <div className="text-input-container">
+    //                 <textarea className="text-input" placeholder="Paste text for optimization..." onChange={handleChangeTextInput} value={userInputText}></textarea>
+    //                 <div className='optimize-action-buttons'>
+    //                     <button className="app-button" onClick={submitTextForOptimization} disabled={chosenKeywords.length <= 0 || userInputText.length <= 0}>Optimize</button>
+    //                     {optimizedText.length > 0 && <button className="app-button" onClick={() => setShowingOptimizedText(true)}>Prev Optimized Text</button>}
+    //                 </div>
+    //             </div>
+    //         }
+            
+    //     </div>
+    // )
 }

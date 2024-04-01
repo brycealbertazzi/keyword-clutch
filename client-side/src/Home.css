@@ -48,6 +48,16 @@
     margin-top: 20px;
   }
 
+  .optimized-text-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    border: 1px solid #59b384;
+  }
+
   /* Styles for the text input container */
   .text-input-container {
     position: relative;
@@ -72,6 +82,21 @@
     font-size: 16px;
     outline: none;
     resize: vertical; /* Allow vertical resizing */
+  }
+
+  /* Styles for disabled textarea */
+  .text-input:disabled {
+    background-color: #f2f2f2; /* Light gray background when disabled */
+    color: #999; /* Light gray text color when disabled */
+    cursor: text; /* Show disabled cursor */
+    border-color: #ccc; /* Light gray border color when disabled */
+  }
+
+  .optimize-action-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
   }
 
   /* Styles for the keyword container */
