@@ -53,7 +53,6 @@ export const Navbar = () => {
                 navigate('/')
             }
         }
-        console.log('Stripe Customer:', stripeCustomer)
     }, [stripeCustomer])
 
     useEffect(() => {

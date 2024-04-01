@@ -9,6 +9,16 @@
     padding: 0 30px;
 }
 
+.optimized-text-headers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: min(calc(100% - 80px), 1360px);
+    min-width: 900px;
+    padding: 0 20px;
+}
+
 .keyword-scrape-container {
     display: flex;
     flex-direction: column;

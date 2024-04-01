@@ -91,7 +91,7 @@
   z-index: 1;
   bottom: 125%;
   left: 50%;
-  margin-left: -150px;
+  margin-left: -300px;
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -106,8 +106,8 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
+  margin-left: 100px;
+  border-width: 7px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
 }

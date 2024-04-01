@@ -73,10 +73,11 @@ export const TextOptimize = ({optimizedText, setOptimizedText}) => {
         )
     }
 
+    const MAX_SELECTED_KEYWORDS = 5
     return (
         <div className='text-optimize-container'>
             <div className="keyword-container">
-                <input type="text" id="keyword-input" value={chosenKeywordInput} placeholder="Type a keyword and press Enter... (min. 3 characters)" onChange={handleChangeKeywordInput} onKeyDown={handleKeyDown}/>
+                <input type="text" id="keyword-input" value={chosenKeywordInput} placeholder="Type a keyword and press Enter... (min. 3 characters)" onChange={handleChangeKeywordInput} onKeyDown={handleKeyDown} disabled={chosenKeywords.length >= MAX_SELECTED_KEYWORDS}/>
                 <div id="keyword-list">
                     {chosenKeywords.map((keyword, index) => {
                         return (<div key={index} className="keyword-box">
@@ -88,7 +89,7 @@ export const TextOptimize = ({optimizedText, setOptimizedText}) => {
             </div>
             <div className="text-input-container">
                 <textarea className="text-input" placeholder="Paste text for optimization..." onChange={handleChangeTextInput} value={optimizedText}></textarea>
-                <button className="app-button" onClick={submitTextForOptimization}>Optimize</button>
+                <button className="app-button" onClick={submitTextForOptimization} disabled={chosenKeywords.length <= 0 || optimizedText.length <= 0}>Optimize</button>
             </div>
         </div>
     )

@@ -111,7 +111,7 @@ routes.get('/weburl', async (req, res) => {
 
 async function chatGPTAPIText(text, keywords) {
     // API endpoint for GPT-3.5-turbo-0125
-    const prompt = `Optimize the following text for SEO, try to make the response as complete as possible. Keep the length of the response as close to the length of the text as possible without exceeding 700 words. "Text: ${text}". Keywords: ${keywords}}.`
+    const prompt = `Rewrite the following text to optimize it for SEO and rank for the given keywords. Keep the length of the response as close to the length of the text as possible, but do not exceed 700 words. "Text: ${text}". Keywords: ${keywords}}.`
 
     /* gpt-3.5-turbo-0613 */
     // Make the HTTP POST request to the OpenAI API

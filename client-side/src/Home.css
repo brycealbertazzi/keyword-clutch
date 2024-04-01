@@ -96,6 +96,15 @@
     box-sizing: border-box;
   }
 
+  #keyword-input:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  #keyword-input:disabled::placeholder {
+    opacity: 0;
+  }
+
   #keyword-list {
     display: flex;
     flex-wrap: wrap;

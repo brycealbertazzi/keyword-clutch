@@ -34,6 +34,7 @@
       }).finally(() => setLoadingTables({...setLoadingTables, [ResultType.WEB_URL]: false}))
     }
 
+    const MAX_SELECTED_KEYWORDS = 5
     const selectKeyword = (e) => {
       if (websiteSEOStep !== 1) return
       const selectedKeyword = e.target.innerText
@@ -86,11 +87,18 @@
         <div className='keyword-scrape-action-items'>
           <div></div>
           <div>
-            {websiteSEOStep === 1 && <h2 style={{textAlign: 'center'}}>Select keywords for SEO optimization</h2>}
-            {websiteSEOStep === 2 && <h2 style={{textAlign: 'center'}}>SEO optimized text for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>}
+            {websiteSEOStep === 1 && <h2 style={{textAlign: 'center'}}>Select keywords for SEO optimization <span style={{fontSize: '15px'}}>(max. 5 keywords)</span></h2>}
+            {websiteSEOStep === 2 && (
+              <div className='optimized-text-headers'>
+                <h2 style={{textAlign: 'center'}}>SEO optimized text for <span style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{url}</span></h2>
+                <h2 style={{textAlign: 'center'}}>Keywords: {
+                  optimizedKeywords.map((keyword, index) => <span key={index} style={{color: ResultTypeColors[ResultType.WEB_URL]}}>{keyword}{index !== optimizedKeywords.length - 1 ? ',' : ''}&nbsp;</span>)
+                }</h2>
+              </div>
+            )}
           </div>
           <div>
-            <button className={websiteSEOStep >= 2 ? 'hidden-button' : 'app-button'} onClick={() => {
+            <button className={websiteSEOStep >= 2 ? 'hidden-button' : 'app-button'} disabled={optimizedKeywords.length <= 0} onClick={() => {
               if (websiteSEOStep === 1) optimizeForKeywords()
               setWebsiteSEOStep(2)
             }}>
@@ -139,7 +147,7 @@
                 return (
                   <div key={grpIndex} className='keyword-display-group'>
                     {keywordGroup.map((keyword, cellIndex) => 
-                      <KeywordCell key={`${grpIndex}${cellIndex}`} keyword={keyword} selectKeyword={selectKeyword}/>
+                      <KeywordCell key={`${grpIndex}${cellIndex}`} keyword={keyword} selectKeyword={selectKeyword} allowedToSelect={optimizedKeywords.length < MAX_SELECTED_KEYWORDS}/>
                     )}
                   </div>
                 )
