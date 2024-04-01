@@ -8,6 +8,7 @@
     height: 60x;
     position: relative;
     margin: 20px auto;
+    cursor: not-allowed;
 }
   
 .spinner:before {
@@ -24,6 +25,7 @@
     border: 5px solid #fff;
     border-top-color: transparent;
     animation: spin 1s linear infinite;
+    cursor: not-allowed;
 }
   
 .loading-icon {
