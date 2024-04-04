@@ -74,23 +74,24 @@ async function hasSubscriptionWithPrice(customerId, priceId) {
 
 routes.get('/get-customer-data', async (req, res) => {
   try {
-    const { customerEmail } = req.body
+    const { customerEmail } = req.query
     const customer = await stripe.customers.list({ email: customerEmail })
-    if (!customer || customer.data.length === 0) {
+    const customerObj = customer.data.find(customer => customer.email === customerEmail)
+    if (!customerObj) {
       res.status(200).send({ customerSubscription: null, customerData: null, paymentMethod: null})
       return
     }
     // Retrieve the customer's subscriptions from Stripe
     const subscriptions = await stripe.subscriptions.list({
-      customer: customer.data[0].id,
+      customer: customerObj.id,
       limit: 1, // Limit to the most recent subscription
     })
     const paymentMethods = await stripe.paymentMethods.list({
-      customer: customer.data[0].id,
+      customer: customerObj.id,
       type: 'card', // Optionally filter by type, e.g., 'card', 'bank_account', etc.
     })
     const mostRecentPaymentMethod = paymentMethods.data[0] ? paymentMethods.data.sort((a, b) => a.created - b.created)[0] : null
-    res.status(200).json({ customerSubscription: subscriptions?.data[0] ? subscriptions.data[0] : null, customerData: customer.data[0], paymentMethod: mostRecentPaymentMethod})
+    res.status(200).json({ customerSubscription: subscriptions?.data[0] ? subscriptions.data[0] : null, customerData: customerObj, paymentMethod: mostRecentPaymentMethod})
   } catch (error) {
     console.error('Error checking customer:', error)
     res.status(500).json({ error: 'An error occurred while checking the customer.' })

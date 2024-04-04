@@ -6,6 +6,7 @@ import './UserAccount.css'
 import '../App.css'
 import { SubscriptionTypeLabels, SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
 import { PopUpModal } from '../components/PopUpModal'
+import { useUser } from "@clerk/clerk-react"
 
 export const ManageAccount = () => {
     const globalContext = useContext(GlobalContext)
@@ -14,6 +15,7 @@ export const ManageAccount = () => {
     const submitFunc = useRef(null)
     const closeFunc = useRef(null)
     const [loading, setLoading] = useState(false)
+    const { user } = useUser()
 
     const cancelSubscription = async () => {
         setLoading(true)
@@ -105,7 +107,7 @@ export const ManageAccount = () => {
                     return 'Expired Free Trial'
                 }
             default:
-                return 'Inactive'
+                return 'No Subscription'
         }
     }
 
@@ -121,20 +123,22 @@ export const ManageAccount = () => {
                 <div className='account-info-fields'>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>Name</h3>
-                        <p className='account-field-value'>{stripeCustomer?.customerData?.name}</p>
+                        <p className='account-field-value'>{user?.fullName}</p>
                     </div>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>Email</h3>
-                        <p className='account-field-value'>{stripeCustomer?.customerData?.email}</p>
+                        <p className='account-field-value'>{user?.primaryEmailAddress?.emailAddress}</p>
                     </div>
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>Subscription Status</h3>
                         <p className='account-field-value'>{determineSubscriptionStatus()}</p>
                     </div>
-                    <div className='account-info-field'>
-                        <h3 className='account-field-label'>{renderNextBillingCycleLabel()}</h3>
-                        <p>{convertUnixTimestampToDate(stripeCustomer?.paymentMethod ? stripeCustomer?.customerSubscription?.current_period_end : stripeCustomer?.customerSubscription?.trial_end)}</p>
-                    </div>
+                    {stripeCustomer?.customerSubscription &&
+                        <div className='account-info-field'>
+                            <h3 className='account-field-label'>{renderNextBillingCycleLabel()}</h3>
+                            <p>{convertUnixTimestampToDate(stripeCustomer?.paymentMethod ? stripeCustomer?.customerSubscription?.current_period_end : stripeCustomer?.customerSubscription?.trial_end)}</p>
+                        </div>
+                    }
                     <div className='account-info-field'>
                         <h3 className='account-field-label'>Payment Method</h3>
                         {stripeCustomer?.paymentMethod ?

@@ -24,7 +24,7 @@ export const Navbar = () => {
 
     const fetchStripeCustomer = async () => {
         if (!user?.primaryEmailAddress?.emailAddress) return
-        await axios.get('/api/stripe/get-customer-data', { customerEmail: user.primaryEmailAddress.emailAddress }).then(res => {
+        await axios.get('/api/stripe/get-customer-data', {params: {customerEmail: user.primaryEmailAddress.emailAddress}}).then(res => {
             setStripeCustomer(res?.data)
         })
     }
