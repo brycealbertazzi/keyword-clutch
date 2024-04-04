@@ -189,7 +189,7 @@
 
 /* Data table page arrows */
 .table-footer {
-    width: 100%;
+    width: min(calc(100% - 40px), 1400px);
     display: flex;
     justify-content: flex-end;
     align-items: center;
