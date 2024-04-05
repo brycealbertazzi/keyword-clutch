@@ -6,7 +6,7 @@ import cors from 'cors'
 dotenv.config()
 const routes = Router()
 
-const stripe = new Stripe(process.env.STRIPE_TEST_KEY)
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 // Function to check if a Stripe customer exists with the given email address
 async function createNewOrReturnExistingCustomer(customerObj) {
@@ -119,13 +119,13 @@ routes.post('/subscribe', cors(), async (req, res) => {
       },
     })
     console.log('customerId', customer.customer.id)
-    const matchingSubscription = await hasSubscriptionWithPrice(customer.customer.id, process.env.TEST_KEYWORD_CLUTCH_STRIPE_PRICE_ID)
+    const matchingSubscription = await hasSubscriptionWithPrice(customer.customer.id, process.env.KEYWORD_CLUTCH_STRIPE_PRICE_ID)
     console.log('matchingSubscription', matchingSubscription)
     if (!matchingSubscription) {
       // Create the subscription
       const subscription = await stripe.subscriptions.create({
         customer: customer.customer.id,
-        items: [{ price: process.env.TEST_KEYWORD_CLUTCH_STRIPE_PRICE_ID, quantity: 1}],
+        items: [{ price: process.env.KEYWORD_CLUTCH_STRIPE_PRICE_ID, quantity: 1}],
         expand: ['latest_invoice.payment_intent'],
       })
       console.log('subscription', subscription)
@@ -159,7 +159,7 @@ routes.post('/start-free-trial', async (req, res) => {
     // Create a subscription with a trial period
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
-      items: [{ price: process.env.TEST_KEYWORD_CLUTCH_STRIPE_PRICE_ID }],
+      items: [{ price: process.env.KEYWORD_CLUTCH_STRIPE_PRICE_ID }],
       trial_period_days: 3, // # of days for the trial period
       cancel_at_period_end: true,
     })
