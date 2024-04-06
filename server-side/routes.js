@@ -111,7 +111,7 @@ routes.get('/weburl', async (req, res) => {
 
 async function chatGPTAPIText(text, keywords) {
     // API endpoint for GPT-3.5-turbo-0125
-    const prompt = `Rewrite the following text to optimize it for SEO and rank for the given keywords. The length of the response should be to more than 1.5x the length of the text, do not exceed 700 words. "Text: ${text}". Keywords: ${keywords}}.`
+    const prompt = `Rewrite the following text to optimize it for SEO and rank for the given keywords. The optimized text should be no more than 1.5x the length of the text passed in. Make sure to end the text on a complete sentence, do not exceed 700 words. "Text: ${text}". Keywords: ${keywords}}.`
 
     /* gpt-3.5-turbo-0613 */
     // Make the HTTP POST request to the OpenAI API
@@ -139,8 +139,8 @@ const openAIClient = new OpenAI({baseURL: 'https://api.openai.com/v1', apiKey: O
 
 async function chatGPTAPIWebUrl(websiteText, optimizedKeywords) {
     // API endpoint for GPT-3.5-turbo-0125
-    const prompt = `Optimize the following website text for SEO, limit the response to 700 words, but try to make the response as complete as possible. Use the delimiter "*del*" to separate sections of the website in the returned string. 
-    Try to have the sections start wherever there is a colon. Try to have about one section per 100 words. "Website text: ${websiteText}". Keywords: ${optimizedKeywords}}.`
+    const prompt = `Optimize the following website text for SEO, limit the response to 700 words. Use the delimiter "*del*" to separate sections of the website in the returned string.
+    Make sure each section ends on a complete sentence. "Website text: ${websiteText}". Keywords: ${optimizedKeywords}}.`
 
     /* gpt-3.5-turbo-0613 */
     // Make the HTTP POST request to the OpenAI API
@@ -150,7 +150,7 @@ async function chatGPTAPIWebUrl(websiteText, optimizedKeywords) {
         ],
         model: "gpt-3.5-turbo-0613",
         max_tokens: 700,
-        temperature: 0.5,
+        temperature: 0.8,
     })
     // Parse and return response
     return completion

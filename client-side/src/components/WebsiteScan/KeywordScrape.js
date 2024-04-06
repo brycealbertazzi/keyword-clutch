@@ -117,6 +117,7 @@
               sectionSplit = sectionSplit.filter((section) => !disallowedHeaders.includes(section))
               console.log(sectionSplit)
               if (sectionSplit.length > 2) {
+                sectionSplit = sectionSplit.filter(section => !section.includes(disallowedHeaders[0]))
                 return (
                   <div key={index} className='optimized-text-section'> 
                     {sectionSplit.map((split, idx) => {
