@@ -48,10 +48,14 @@ export const PaymentForm = () => {
           });
         if (error) {
             console.error('Error creating payment method:', error)
+            setLoading(false)
+            postHandleSubscribe(true)
+            return
         }
         const {id} = paymentMethod
         if (!id) {
             setLoading(false)
+            postHandleSubscribe(true)
             return
         }
         await axios.post('/api/stripe/subscribe', {
@@ -59,7 +63,7 @@ export const PaymentForm = () => {
             paymentMethodId: id,
         }).then(res => {
             console.log('Subscription started: ', res.data)
-            postHandleSubscribe()
+            postHandleSubscribe(false)
         }).catch(e => {
             console.error('Error starting subscription:', e)
         }).finally(() => {
@@ -73,10 +77,15 @@ export const PaymentForm = () => {
         setPopUpModalData({ open: true, header: 'Subscribe', message: 'Are you sure you want to subscribe?' })
     }
 
-    const postHandleSubscribe = () => {
+    const postHandleSubscribe = (error) => {
         submitFunc.current = null
-        closeFunc.current = () => {navigate('/home')}
-        setPopUpModalData({ open: true, header: 'You are subscribed!', message: `Thankyou for subscribing to Keyword Clutch!` })
+        if (error) {
+            closeFunc.current = () => {setPage(2)}
+            setPopUpModalData({ open: true, header: 'Error', message: 'We were unable to process your transaction, make sure your credit card and billing address are valid.' })
+        } else {
+            closeFunc.current = () => {navigate('/home')}
+            setPopUpModalData({ open: true, header: 'You are subscribed!', message: `Thankyou for subscribing to Keyword Clutch!` })
+        }
     }
 
     const handleChange = (e, type) => {
