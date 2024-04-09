@@ -24,3 +24,15 @@
     align-items: center;
     margin-top: 30px;
 }
+
+@media (max-width: 600px) {
+    .pricing-card {
+        width: 90%; /* Adjusted width for smaller screens */
+        border: none; /* Remove border */
+        border-radius: 0; /* Remove border radius */
+    }
+
+    .pricing-pg-buttons {
+        display: flex;
+    }
+}

@@ -23,6 +23,7 @@
     padding: 20px;
     border-radius: 10px;
     border: 1px solid #ccc;
+    background-color: #333;
 }
 
 .bulletpoint {
@@ -52,4 +53,12 @@
 
 .logo {
     margin: 20px 30px;
+}
+
+@media (max-width: 600px) {
+    .bulletpoint-container {
+        width: 90%;
+        border: none;
+        border-radius: 0;
+    }
 }

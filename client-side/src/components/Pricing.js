@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState, useRef } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import GlobalContext from '../global/GlobalContext'
 import { useNavigate } from 'react-router-dom'
 import './Pricing.css'
@@ -8,7 +8,6 @@ import { useUser, SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
 import axios from 'axios'
 import { ResultType, ResultTypeColors, SubscriptionTypes, convertUnixTimestampToDate } from '../Utils'
 import { PopUpModal } from './PopUpModal'
-import { LoadingSpinner } from '../LoadingSpinner'
 
 export const Pricing = () => {
     const globalContext = useContext(GlobalContext)
