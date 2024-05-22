@@ -109,8 +109,8 @@ export const TextOptimize = ({userInputText, setUserInputText, optimizedText, se
                 <div className="text-input-container">
                     <textarea className="text-input" placeholder="Paste text for optimization..." onChange={handleChangeTextInput} value={userInputText}></textarea>
                     <div className='optimize-action-buttons'>
-                        <button className="app-button" onClick={submitTextForOptimization} disabled={chosenKeywords.length <= 0 || userInputText.length <= 0}>Optimize</button>
-                        {optimizedText.length > 0 && <button className="app-button" onClick={() => setShowingOptimizedText(true)}>Prev Optimized Text</button>}
+                        {optimizedText.length > 0 && <button className="app-button" style={{margin: '0 1rem'}} onClick={() => setShowingOptimizedText(true)}>Previous Text</button>}
+                        <button className="app-button" style={{margin: '0 1rem'}} onClick={submitTextForOptimization} disabled={chosenKeywords.length <= 0 || userInputText.length <= 0}>Optimize</button>
                     </div>
                 </div>
             </div>
