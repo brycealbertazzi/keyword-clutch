@@ -28,7 +28,7 @@ export const YoutubeKeywordAPIData = ({apiData, keyword, loading, setLoadingTabl
     }
 
     if (loading) {
-        return <LoadingSpinner type={ResultType.YOUTUBE}/>
+        return <LoadingSpinner type={ResultType.YOUTUBE} msg={"Fetching Youtube Keyword Data..."}/>
     }
 
     if (!apiData) {

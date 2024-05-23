@@ -28,7 +28,7 @@ export const KeywordSuggestAPIData = ({apiData, keyword, loading, setLoadingTabl
     }
 
     if (loading) {
-        return <LoadingSpinner type={ResultType.GOOGLE}/>
+        return <LoadingSpinner type={ResultType.GOOGLE} msg={"Fetching Google Keyword Data..."}/>
     }
 
     if (!apiData) {

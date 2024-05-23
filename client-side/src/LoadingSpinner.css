@@ -32,6 +32,14 @@
     margin-top: 175px;
     animation: pulse 1s ease-in-out infinite alternate;
 }
+
+.loading-msg {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 20px;
+    cursor: not-allowed;
+}
   
 @keyframes spin {
     0% { transform: rotate(0deg); }

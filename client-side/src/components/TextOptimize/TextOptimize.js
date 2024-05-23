@@ -72,7 +72,7 @@ export const TextOptimize = ({userInputText, setUserInputText, optimizedText, se
     if (loading) {
         return (
             <div style={{marginTop: '50px'}}>
-                <LoadingSpinner type={null}/>
+                <LoadingSpinner type={null} msg={"Optimizing Text..."}/>
             </div>
         )
     }

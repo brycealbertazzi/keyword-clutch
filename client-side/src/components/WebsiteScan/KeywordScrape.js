@@ -75,7 +75,7 @@
     }
 
     if (loading) {
-      return <LoadingSpinner type={ResultType.WEB_URL}/>
+      return <LoadingSpinner type={ResultType.WEB_URL} msg={websiteSEOStep === 1 ? `Scraping ${url}...` : `Optimizing Website Text...`}/>
     }
 
     if (!apiData) {

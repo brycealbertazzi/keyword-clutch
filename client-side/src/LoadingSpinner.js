@@ -5,7 +5,7 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ResultType, ResultTypeColors } from './Utils'
 
-export const LoadingSpinner = ({type}) => {
+export const LoadingSpinner = ({type, msg}) => {
   return (
     <div className='spinner-container'>
         <div className="spinner">
@@ -18,6 +18,7 @@ export const LoadingSpinner = ({type}) => {
               />
             }&nbsp;
         </div>
+        {msg && <h2 className='loading-msg'>{msg}</h2>}
     </div>
   )
 }
