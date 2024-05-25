@@ -70,7 +70,10 @@ export const ManageAccount = () => {
                 if (stripeCustomer?.customerSubscription?.cancel_at_period_end) {
                     return <button className='app-button' onClick={handleRenewSubscription}>Reactivate Subscription</button>
                 }
-                return <button className='app-button' onClick={handleCancelSubscription}>Cancel Subscription</button>
+                return <div className='cancel-div'>
+                    <button className='app-button' onClick={() => navigate(-1)}>Back</button>
+                    <button className='cancel-btn' onClick={handleCancelSubscription}>Cancel Subscription</button>
+                </div>
             case SubscriptionTypes.TRIALING:
                 return <button className='app-button' onClick={() => navigate('/pricing')}>Subscribe</button>
             default:
