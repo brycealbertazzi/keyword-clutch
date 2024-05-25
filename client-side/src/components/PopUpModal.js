@@ -21,7 +21,7 @@ export const PopUpModal = ({submitFunc, closeFunc}) => {
                 </div>
                 {submitFunc ?
                     <div className="modal-actions">
-                        <button onClick={() => handleCloseModal()} className="app-button">Cancel</button>
+                        <button onClick={() => handleCloseModal()} className="app-button">Back</button>
                         <button onClick={() => {submitFunc(); handleCloseModal()}} className="app-button">Confirm</button>
                     </div>
                     :
